@@ -123,7 +123,7 @@ function BuildSphere() {
 	
 	
 	// Add Villages
-	for (var mercTile in mercTiles) {
+/*	for (var mercTile in mercTiles) {
 		var newVillage = GameObject.Instantiate(mercVillageObject,Vector3.zero,Quaternion.identity);
 		PlaceVillageOnTile(mercTile as TileData,newVillage);
 	}
@@ -136,7 +136,7 @@ function BuildSphere() {
 	for (var aggTile in aggTiles) {
 		var newaggVillage = GameObject.Instantiate(aggVillageObject,Vector3.zero,Quaternion.identity);
 		PlaceVillageOnTile(aggTile as TileData,newaggVillage);
-	}
+	} */
 	
 	// connect tiles
 	for (var vertex = 0 ; vertex < 12; vertex++) {
@@ -144,11 +144,11 @@ function BuildSphere() {
 	}
 	
 	// connect villages
-	for (var currObject:Village in villageList) {
+/*	for (var currObject:Village in villageList) {
 		var nearVillages = currObject.tile.GetAllVillagesInRange(2);
 		
 		currObject.connectedVillages = nearVillages;
-	}	
+	}	 */
 }
 
 function MakePoints(points: Vector3[], object: GameObject) {

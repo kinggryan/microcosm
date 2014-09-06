@@ -6,7 +6,7 @@
 	
 	*****/
 	
-class Resource extends MonoBehaviour {
+class NaturalResource extends MonoBehaviour {
 	// Properties
 	var type: String = "";
 	var localPosition: Vector3 = Vector3.zero;

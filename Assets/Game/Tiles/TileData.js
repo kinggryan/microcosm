@@ -17,6 +17,7 @@ class TileData extends SelectableComponent {
 	public var tileCenter: Vector3;
 	public var village: Village;
 	public var followers: ArrayList;
+	public var resources: NaturalResource[];
 	// village:
 
 	// Static Properties
@@ -56,6 +57,8 @@ class TileData extends SelectableComponent {
 		
 		// set up follower array list
 		followers = new ArrayList();
+		
+		resources = new NaturalResource[2];
 	}
 
 	// sets placement of followers
@@ -78,6 +81,13 @@ class TileData extends SelectableComponent {
 			if (followers.Count > 1)
 				thisFollowerOffset += Vector3(0,0,followerRowWidth/(followers.Count - 1));
 		}
+	}
+	
+	function PlaceResources() {
+		if(resources[0] != null)
+			resources[0].localPosition = Vector3(0,0,0.5);
+		if(resources[1] != null)
+			resources[1].localPosition = Vector3(0,0,-0.5);
 	}
 	
 	function LookForTile(target: TileData, distance: int,mustBeWalkable: boolean ) : boolean {
