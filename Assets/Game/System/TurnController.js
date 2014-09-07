@@ -46,6 +46,9 @@ class TurnController extends MonoBehaviour {
 		// increment score
 		Scorekeeper.IncreaseScore();	
 		
+		// start new turn
+		StructureNetwork.StartTurnForPlayer();
+		
 		// increment turn count
 		turnCount++;
 	}

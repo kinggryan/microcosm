@@ -72,55 +72,78 @@ function BuildSphere() {
 	for (var index = 1; index <= 5; index++) {
 		if (index < 3 || index == 4)
 			if (index == 1)
-				aggTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+				aggTiles.Add(DrawTile(keyPoints,0,index,new TerrainWasteland()));
 			else if (index == 4)
-				milTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+				milTiles.Add(DrawTile(keyPoints,0,index,new TerrainWasteland()));
 			else 
-				mercTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+				mercTiles.Add(DrawTile(keyPoints,0,index,new TerrainWasteland()));
 		else
-			DrawTile(keyPoints,0,index,new TerrainOcean());
+			DrawTile(keyPoints,0,index,new TerrainWasteland());
 			
 		if (index == 3) 
-			DrawTile(keyPoints,index,index+1,new TerrainOcean());
+			DrawTile(keyPoints,index,index+1,new TerrainWasteland());
 		else if(index < 5)
-			DrawTile(keyPoints,index,index+1,new TerrainForest());
+			DrawTile(keyPoints,index,index+1,new TerrainWasteland());
 		else // index == 5
-			DrawTile(keyPoints,index,1,new TerrainOcean());
+			DrawTile(keyPoints,index,1,new TerrainWasteland());
 	}
 	
 	// draw tiles for bottom half
 	for (index = 7; index <= 11; index++) {
 		if (index < 9 || index == 10)
 			if (index == 7)
-				aggTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				aggTiles.Add(DrawTile(keyPoints,6,index,new TerrainWasteland()));
 			else if (index == 10)
-				milTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				milTiles.Add(DrawTile(keyPoints,6,index,new TerrainWasteland()));
 			else
-				mercTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				mercTiles.Add(DrawTile(keyPoints,6,index,new TerrainWasteland()));
 		else
-			DrawTile(keyPoints,6,index,new TerrainOcean());
+			DrawTile(keyPoints,6,index,new TerrainWasteland());
 		
 		if (index == 9)
-			DrawTile(keyPoints,index,index+1,new TerrainOcean());
+			DrawTile(keyPoints,index,index+1,new TerrainWasteland());
 		else if(index < 11)
-			DrawTile(keyPoints,index,index+1,new TerrainForest());
+			DrawTile(keyPoints,index,index+1,new TerrainWasteland());
 		else
-			DrawTile(keyPoints,index,7,new TerrainOcean());
+			DrawTile(keyPoints,index,7,new TerrainWasteland());
 	}
 	
 	// Draw middle tiles
-	aggTiles.Add(DrawTile(keyPoints,1,10,new TerrainForest()));
-	mercTiles.Add(DrawTile(keyPoints,2,11,new TerrainForest()));
-	DrawTile(keyPoints,3,7,new TerrainOcean());
-	DrawTile(keyPoints,4,8,new TerrainForest());
-	milTiles.Add(DrawTile(keyPoints,5,9,new TerrainForest()));
+	aggTiles.Add(DrawTile(keyPoints,1,10,new TerrainWasteland()));
+	mercTiles.Add(DrawTile(keyPoints,2,11,new TerrainWasteland()));
+	DrawTile(keyPoints,3,7,new TerrainWasteland());
+	DrawTile(keyPoints,4,8,new TerrainWasteland());
+	milTiles.Add(DrawTile(keyPoints,5,9,new TerrainWasteland()));
 	
-	DrawTile(keyPoints,1,9,new TerrainOcean());
-	DrawTile(keyPoints,2,10,new TerrainForest());
-	milTiles.Add(DrawTile(keyPoints,3,11,new TerrainForest()));
-	aggTiles.Add(DrawTile(keyPoints,4,7,new TerrainForest()));
-	mercTiles.Add(DrawTile(keyPoints,5,8,new TerrainForest()));
+	DrawTile(keyPoints,1,9,new TerrainWasteland());
+	DrawTile(keyPoints,2,10,new TerrainWasteland());
+	milTiles.Add(DrawTile(keyPoints,3,11,new TerrainWasteland()));
+	aggTiles.Add(DrawTile(keyPoints,4,7,new TerrainWasteland()));
+	mercTiles.Add(DrawTile(keyPoints,5,8,new TerrainWasteland()));
 	
+	for (var mercTile in mercTiles) {
+		var data = mercTile as TileData;
+		var resource = data.gameObject.AddComponent(Metal) as NaturalResource;
+		data.resources[0] = resource;
+		data.terrain.color = Color.gray;
+		data.PlaceResources();
+	}
+	
+	for (var aggTile in aggTiles) {
+		var data2 = aggTile as TileData;
+		var resource2 = data2.gameObject.AddComponent(Water) as NaturalResource;
+		data2.resources[0] = resource2;
+		data2.terrain.color = Color.cyan;
+		data2.PlaceResources();
+	}
+	
+	for (var milTile in milTiles) {
+		var data3 = milTile as TileData;
+		var resource3 = data3.gameObject.AddComponent(Gas) as NaturalResource;
+		data3.resources[0] = resource3;
+		data3.terrain.color = Color.green;
+		data3.PlaceResources();
+	}
 	
 	// Add Villages
 /*	for (var mercTile in mercTiles) {

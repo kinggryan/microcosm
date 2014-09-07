@@ -28,9 +28,10 @@ class Deck extends MonoBehaviour {
 		
 		for(deckCard in deck)
 			deckCard = new CardData();
-			
-		deck[0] = new RecruitMissionary();
-		deck[1] = new CoralReef();
+		
+		// Debug Hand	
+		deck[0] = new BuildBasicColony();
+		deck[1] = new BuildBasicFarm();
 		deck[2] = new GloriousDay();
 		
 		// todo make deck consist of test cards

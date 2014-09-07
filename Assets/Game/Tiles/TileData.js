@@ -18,6 +18,7 @@ class TileData extends SelectableComponent {
 	public var village: Village;
 	public var followers: ArrayList;
 	public var resources: NaturalResource[];
+	public var structure: Structure = null;
 	// village:
 
 	// Static Properties
@@ -83,11 +84,17 @@ class TileData extends SelectableComponent {
 		}
 	}
 	
+	function PlaceStructure(structure: GameObject) {
+		structure.transform.position = tileCenter * 1.1;
+		structure.transform.up = tileCenter.normalized;
+	}
+	
 	function PlaceResources() {
-		if(resources[0] != null)
-			resources[0].localPosition = Vector3(0,0,0.5);
+		if(resources[0] != null) {
+			resources[0].localPosition = tileCenter;
+		}
 		if(resources[1] != null)
-			resources[1].localPosition = Vector3(0,0,-0.5);
+			resources[1].localPosition = tileCenter + Vector3(0,0,-0.5);
 	}
 	
 	function LookForTile(target: TileData, distance: int,mustBeWalkable: boolean ) : boolean {
