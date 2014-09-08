@@ -16,6 +16,8 @@ class Structure extends MonoBehaviour {
 	var helpText:		String = "";
 	
 	static var displayStyle : GUIStyle = null;
+
+	var owner: PhotonPlayer;
 	
 	// Methods
 	function Start() {
@@ -25,6 +27,11 @@ class Structure extends MonoBehaviour {
 			displayStyle = GUIStyle();
 			displayStyle.fontSize = 18;
 		}
+		
+		if (owner == PhotonNetwork.player)
+			renderer.material.color = Color.blue;
+		else
+			renderer.material.color = Color.red;
 	}
 	
 	function InitializeChildren() {
@@ -59,13 +66,13 @@ class Structure extends MonoBehaviour {
 		// look at adjacent tiles for a tiles
 		for (connectedTile in tile.adjacentTiles) {
 			// we haven't yet found an adjacent tile
-			if (!foundAdjacentNetwork && connectedTile.structure != null) {
+			if (!foundAdjacentNetwork && connectedTile.structure != null && connectedTile.structure.owner == owner) {
 				// add self to the network
 				connectedTile.structure.AddChildStructure(this);
 				structureNetwork = connectedTile.structure.structureNetwork;
 				foundAdjacentNetwork = true;
 			}
-			if (foundAdjacentNetwork && connectedTile.structure != null && connectedTile.structure.structureNetwork != structureNetwork) {
+			if (foundAdjacentNetwork && connectedTile.structure != null && connectedTile.structure.structureNetwork != structureNetwork && connectedTile.structure.owner == owner) {
 				// we must combine the two disjoint networks
 				structureNetwork.Combine(connectedTile.structure.structureNetwork,this);
 			}
@@ -97,4 +104,6 @@ class Structure extends MonoBehaviour {
 			DrawStats();
 		}
 	}
+	
+	function RefreshHelpText() {}
 }

@@ -11,9 +11,11 @@ class BasicColony extends Colony {
 	// Methods
 	function Start() {
 		population = 2;
+		maximumPopulation = 10;
+		popPerFoodRate = 1;
 		structureName = "Colony";
 		
-		helpText = "Pop: "+population+"\nMax: "+maximumPopulation+"\n+1 pop/food";
+		RefreshHelpText();
 		
 		super.Start();
 	}
@@ -22,5 +24,9 @@ class BasicColony extends Colony {
 		structureNetwork.workers += population;
 		
 		super.GenerateResources();
+	}
+	
+	function RefreshHelpText() {
+		helpText = String.Format("Pop: {0}\nMax: {1}\n+1 pop/food",population,maximumPopulation);
 	}
 }

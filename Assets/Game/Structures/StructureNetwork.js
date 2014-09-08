@@ -1,5 +1,67 @@
 ﻿/****
 
+	Feeding Queue class
+	
+	This class is used by the structure network to distribute food. Colonies are organized in it based on their rate of pop/food.
+	The queue can distribute food to classes in a way that generates the most population
+	
+	****/
+	
+class FeedingQueue {
+	// Properties
+	public var queue : ArrayList;
+	
+	// Methods
+	function FeedingQueue() {
+		queue = new ArrayList();
+	}
+	
+	function AddColony(colony: Colony) {
+		// find proper index
+		var index:int;
+		for(index = 0 ; index < queue.Count ; index++) {
+			var colonyAtIndex = queue[index] as Colony;
+		
+			if(colony.popPerFoodRate >= colonyAtIndex.popPerFoodRate)
+				break;
+		}
+		
+		// insert the element
+		queue.Insert(index,colony);
+	}
+	
+	function RemoveColony(colony: Colony) {
+		queue.Remove(colony);
+	}
+	
+	function GiveFoodToColonies(food: int) {
+		var remainingFood = food;
+	
+		while(remainingFood > 0 && queue.Count > 0) {
+			// give one food to first colony
+			var colonyToFeed = queue[0] as Colony;
+			
+			remainingFood = colonyToFeed.FeedAndReturnRemainder(remainingFood);
+			
+			// if there was food left over, remove this colony from the queue
+			if (remainingFood > 0)
+				RemoveColony(colonyToFeed);
+		}
+	}
+	
+	function Combine(otherQ: FeedingQueue) {
+		// go through other queue and take all of their elements
+		for(var colony in otherQ.queue) {
+			queue.AddColony(colony as Colony);
+		}
+		
+		// clear out the other q. Shouldn't be relevant
+		otherQ.queue.Clear();
+	}
+}
+
+/****
+
 		Structure Network class
 		
 		****/
@@ -14,8 +76,11 @@ class StructureNetwork extends Object {
 	
 	var workers: int = 0;
 	
+	var feedingQ: FeedingQueue;
+	
 	// Static properties
 	static var playerOneStructureNetworks: ArrayList = null;
+	static var playerTwoStructureNetworks: ArrayList = null;
 	
 //	var player: PhotonPlayer;
 
@@ -23,10 +88,13 @@ class StructureNetwork extends Object {
 	function StructureNetwork() {
 		Debug.Log("New structure network");
 	
-		if (playerOneStructureNetworks == null)
+		if (playerOneStructureNetworks == null) {
 			playerOneStructureNetworks = new ArrayList();
-			
-		playerOneStructureNetworks.Add(this);
+			playerTwoStructureNetworks = new ArrayList();
+		}
+		
+		// initialize feeding queue
+		feedingQ = new FeedingQueue();
 	}
 	
 	function Combine(otherNetwork : StructureNetwork, structureToChildTo: Structure) {
@@ -41,6 +109,9 @@ class StructureNetwork extends Object {
 		metal += otherNetwork.metal;
 		gas += otherNetwork.gas;
 		food += otherNetwork.food;
+		
+		// combine feeding queues
+		feedingQ.Combine(otherNetwork.feedingQ);
 	}
 	
 	// recursively adds structures to the network
@@ -81,12 +152,16 @@ class StructureNetwork extends Object {
 			else
 				index++;
 			
-			// TODO generate food and increment population
+			// Feed colonies
+			currentNetwork.feedingQ.GiveFoodToColonies(currentNetwork.food);
 		}
 	}
 	
-	static function StartTurnForPlayer() {
-		// TODO function with multiple players
+	static function StartTurnForPlayerOne() {
 		RefreshResourcesAndGrowColoniesForStructureNetworkList(playerOneStructureNetworks);
+	}
+	
+	static function StartTurnForPlayerTwo() {
+			RefreshResourcesAndGrowColoniesForStructureNetworkList(playerTwoStructureNetworks);
 	}
 }

@@ -23,6 +23,8 @@ public var radius = 3;
 private var vertexAdjacencyLists: ArrayList[];
 private var vertexTileLists: ArrayList[];
 
+private var tileViewID: int = 1000;
+
 function Start () {
 	vertexAdjacencyLists = new ArrayList[12];
 	vertexTileLists = new ArrayList[12];
@@ -252,6 +254,11 @@ function GenerateTile(pointA: Vector3, pointB: Vector3, gameTerrain: GameTerrain
 	
 	// give terrain tile data
 	gameTerrain.tile = tileData;
+	
+	// set tileObject's photon view view id
+	var view = tileObject.GetComponent(PhotonView) as PhotonView;
+	view.viewID = tileViewID++;
+	Debug.Log("setting view");
 	
 	return tileData;
 }

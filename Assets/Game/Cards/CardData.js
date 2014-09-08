@@ -92,7 +92,7 @@ class CardData extends Object {
 	var card: Card = null;
 	
 	// Methods
-	function UseAbility(target: SelectableComponent) : boolean {}
+	function UseAbility(target: SelectableComponent,owner: PhotonPlayer) : boolean {}
 	
 	function CreateFollower(target: TileData, followerPrefab: GameObject) {
 		var follower = GameObject.Instantiate(followerPrefab,Vector3.zero,Quaternion.identity);
@@ -101,7 +101,7 @@ class CardData extends Object {
 		followerData.StartOnTile(target);
 	}
 	
-	function CreateStructure(target: TileData, structureObject: GameObject) {
+	function CreateStructure(target: TileData, structureObject: GameObject,owner: PhotonPlayer) {
 		var structure = GameObject.Instantiate(structureObject,Vector3.zero,Quaternion.identity);
 		var structureData = structure.GetComponent(Structure);
 		
@@ -109,16 +109,17 @@ class CardData extends Object {
 		target.structure = structureData;
 		structureData.tile = target;
 		structureData.InitializeChildren();
+		structureData.owner = owner;
 		structureData.CreateOrJoinStructureNetwork();
 	}
 	
-	function UseResourcesToBuildStructureOnTile(targetTile: TileData, cost: ResourceCost) : boolean {
+	function UseResourcesToBuildStructureOnTile(targetTile: TileData, cost: ResourceCost,owner: PhotonPlayer) : boolean {
 		var totalResourcesOfConnectedNetworks = new ResourceCost();
 		
 		var connectedNetworks = new ArrayList();
 		
 		for(connectedTile in targetTile.adjacentTiles) {
-			if (connectedTile.structure != null && !connectedNetworks.Contains(connectedTile.structure.structureNetwork)) {
+			if (connectedTile.structure != null && !connectedNetworks.Contains(connectedTile.structure.structureNetwork) && connectedTile.structure.owner == owner) {
 				connectedNetworks.Add(connectedTile.structure.structureNetwork);
 				
 				// add network's resources to total resources
@@ -148,6 +149,10 @@ class CardData extends Object {
 		}
 		else
 			return false;
+	}
+	
+	function GetDataNameForNetwork() : String {
+		return "Error";
 	}
 }
 

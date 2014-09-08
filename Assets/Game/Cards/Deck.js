@@ -32,7 +32,7 @@ class Deck extends MonoBehaviour {
 		// Debug Hand	
 		deck[0] = new BuildBasicColony();
 		deck[1] = new BuildBasicFarm();
-		deck[2] = new GloriousDay();
+		deck[2] = new BuildBasicFarm();
 		
 		// todo make deck consist of test cards
 		

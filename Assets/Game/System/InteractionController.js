@@ -28,7 +28,7 @@ static class InteractionMode {
 }
 			
 // Interaction Controller class
-class InteractionController extends MonoBehaviour {
+class InteractionController extends Photon.MonoBehaviour {
 	// Properties
 	
 	// default to nothing selected
@@ -36,22 +36,9 @@ class InteractionController extends MonoBehaviour {
 	private var interactionMode: int = InteractionMode.None;
 	
 	// Methods
-	function OnGUI() {
-		var passTurnButtonPosition = Rect(105,105,80,45);
-		
-		if (GUI.Button(passTurnButtonPosition,"Pass Turn")) {
-			// Deselect
-			if(selectedObject != null) {
-				Debug.Log("Deselecting " + selectedObject);
-				selectedObject.Deselect(true);
-				selectedObject = null;
-			}
-			
-			interactionMode = InteractionMode.None;
-		
-			// pass turn
-			TurnController.PassTurn();
-		}
+	function Start() {
+		photonView.viewID = 1;
+
 	}
 	
 	function Update() {
@@ -241,6 +228,13 @@ class InteractionController extends MonoBehaviour {
 			
 			// call ability. If it was a success, deselect; otherwise, don't
 			if (card.UseAbility(terrain)) {
+				// if connected, send the play ability message
+				if (PhotonNetwork.connected) {
+					Debug.Log("sending " + photonView.viewID);
+				//	photonView.RPC("Test",PhotonTargets.Others);
+					photonView.RPC("PlayCardAcrossNetwork",PhotonTargets.Others,card.GetDataNameForNetwork(),PhotonView.Get(terrain).viewID);
+				}
+				
 				interactionMode = InteractionMode.None;
 				
 				// if the card is still in hand after being played, deselect it
@@ -277,4 +271,22 @@ class InteractionController extends MonoBehaviour {
 		selectedObject.Select();
 		interactionMode = card.data.targettingMode;
 	}
+	
+	// This method generates a card and then plays it with given targets. Used across networks
+	@RPC
+	function PlayCardAcrossNetwork(cardName: String,targetViewID: int,info: PhotonMessageInfo) {
+		Debug.Log("playing");
+		// get targetted object
+		var targetObject = PhotonView.Find(targetViewID).GetComponent(SelectableComponent) as SelectableComponent;
+		
+		// generate card data
+		var cardType = System.Type.GetType(cardName);
+		var cardBeingPlayed = new cardType() as CardData;
+		Debug.Log("Type : "+cardType+" and card : "+cardBeingPlayed);
+		
+		// Use card's effect on target
+		cardBeingPlayed.UseAbility(targetObject,info.sender);
+	}
+	
+
 }
