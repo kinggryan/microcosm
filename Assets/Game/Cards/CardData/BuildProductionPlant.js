@@ -6,24 +6,26 @@
 	
 	*****/
 	
-class BuildBasicFarm extends CardData {
+class BuildProductionPlant extends CardData {
 	// Methods
 	var structureObject: GameObject;
 	
-	function BuildBasicFarm() {
-		cardName = "Basic Farm";
-		text = "Expansion - Farm\nCost: W\nWorkers: 1\nPoints: 1\nEach turn, +1 food";
-		structureObject = Resources.Load("BasicFarm") as GameObject;
+	function BuildProductionPlant() {
+		cardName = "Production Plant";
+		text = "Expansion - Factory\nCost: M\nWorkers: 1\nPoints: 5\nDouble the natural resource on this tile.";
+		structureObject = Resources.Load("ProductionPlant") as GameObject;
 		targettingMode = InteractionMode.CardTargettingTerrain;
 	}
 	
 	function UseAbility(target: SelectableComponent,owner:PhotonPlayer) : boolean {
-		// make sure you can target the tile
 		var targetTile = target as TileData;
+		
+		// set cost
 		var cost = new ResourceCost();
 		cost.workers = 1;
-		cost.water = 1;
+		cost.metal = 1;
 		
+		// verify targettability
 		if(owner != PhotonNetwork.player || (TurnController.myTurn && TurnController.coloniesPlayed == 0 && targetTile.structure == null && UseResourcesToBuildStructureOnTile(targetTile,cost,owner))) {
 			CreateStructure(targetTile,structureObject,owner);
 			
@@ -42,6 +44,6 @@ class BuildBasicFarm extends CardData {
 	}
 	
 	function GetDataNameForNetwork() : String {
-		return "BuildBasicFarm";
+		return "BuildProductionPlant";
 	}
 }

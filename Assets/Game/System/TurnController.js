@@ -115,6 +115,10 @@ class TurnController extends Photon.MonoBehaviour {
 			// purge used pieces
 			playerUsedGamePieceList.Clear();
 			
+			// Draw card
+			var deck = GameObject.FindObjectOfType(Deck) as Deck;
+			deck.DrawCard();
+			
 			// your turn
 			myTurn = true;
 		

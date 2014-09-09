@@ -33,17 +33,59 @@ class Deck extends MonoBehaviour {
 	function SetStarterDeck() {
 		// Construct Shuffle Indices
 		var remainingCardIndices = ArrayList();
-		for(var index = 0 ; index < 30 ; index++)
+		for(var index = 1 ; index < 30 ; index++)
 			remainingCardIndices.Add(index);
 	
-				// todo make deck consist of test cards
-		// default card is basic colony
-		for(deckCard in deck)
-			deckCard = new BuildBasicColony();
+		// first card should be basic colony
+		deck[0] = BuildBasicColony();
 	
-		// ConstructDeck by randomly pulling indices out.
-		for (var test = 0 ; test < 15 ; test++)
+		// Construct rest of deck randomly
+		// Deck list (29 cards) :
+		// 		Basic Colony 			x2
+		//		Housing Dome 			x2
+		// 		Exploration Base 		x2
+		//		Basic Farm				x5
+		//		Research Facility 		x2
+		//		Tech Windfall			x2
+		//		Production Plant		x2
+		//		Distractitorium			x2
+		//		Utopia Dome				x2
+		//		Space Plantation		x2
+		//		Food Processing Plant	x2
+		//		Engineering Institute	x2
+		//		Viewing Platform		x2
+		
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicColony();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicColony();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildHousingDome();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildHousingDome();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildExplorationBase();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildExplorationBase();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildResearchFacility();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildResearchFacility();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildTechWindfall();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildTechWindfall();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildProductionPlant();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildProductionPlant();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildDistractitorium();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildDistractitorium();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildUtopiaDome();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildUtopiaDome();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildSpacePlantation();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildSpacePlantation();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildFoodProcessingPlant();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildFoodProcessingPlant();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildEngineeringInstitute();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildEngineeringInstitute();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildViewingPlatform();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildViewingPlatform();
+		
+		// END DECKLIST
 	}
 	
 	function DrawStartingHand() {
@@ -83,8 +125,8 @@ class Deck extends MonoBehaviour {
 	
 		for (card in hand) {
 			if (card != null)	
-				card.transform.localPosition = Vector3(2.3,0.9-cardVerticalOffset,3);
-				cardVerticalOffset += 0.55;
+				card.transform.localPosition = Vector3(2.3,1.4-cardVerticalOffset,3);
+				cardVerticalOffset += 0.6;
 		}
 	}
 	

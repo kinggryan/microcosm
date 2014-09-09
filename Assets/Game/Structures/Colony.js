@@ -75,4 +75,10 @@ class Colony extends Structure {
 		
 		return remainingFood;
 	}
+	
+	function GenerateResources() {
+		structureNetwork.workers += population;
+		
+		super.GenerateResources();
+	}
 }

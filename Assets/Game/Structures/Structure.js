@@ -112,4 +112,12 @@ class Structure extends MonoBehaviour {
 	}
 	
 	function RefreshHelpText() {}
+	
+	function StartTurn() {
+		// start turn for children
+		for (var child in childStructures) {
+			if (child != null)
+				child.StartTurn();
+		}
+	}	// for most structures, this does nothing. For some, this has an effect
 }

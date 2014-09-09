@@ -2,7 +2,7 @@
 
 	Basic Colony
 	-Starting Pop: 2
-	-Max pop: 10
+	-Max pop: 7
 	- +1 population/food
 	
 	***/
@@ -11,19 +11,13 @@ class BasicColony extends Colony {
 	// Methods
 	function Start() {
 		population = 2;
-		maximumPopulation = 10;
+		maximumPopulation = 7;
 		popPerFoodRate = 1;
-		structureName = "Colony";
+		structureName = "Basic Colony";
 		
 		RefreshHelpText();
 		
 		super.Start();
-	}
-	
-	function GenerateResources() {
-		structureNetwork.workers += population;
-		
-		super.GenerateResources();
 	}
 	
 	function RefreshHelpText() {

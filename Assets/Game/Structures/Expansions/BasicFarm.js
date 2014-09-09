@@ -26,7 +26,6 @@ class BasicFarm extends Expansion {
 	// Methods
 	function GenerateResources() {
 		structureNetwork.food += 1;
-		structureNetwork.workers -= workers;
 		
 		super.GenerateResources();
 	}

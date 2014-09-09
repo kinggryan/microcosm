@@ -25,6 +25,8 @@ static class InteractionMode {
 	
 	public var CardTargettingVillage = 4;
 	public var CardTargettingTerrain = 5;
+	
+	public var StructureEntersPlayEffect = 6;
 }
 			
 // Interaction Controller class
@@ -34,6 +36,8 @@ class InteractionController extends Photon.MonoBehaviour {
 	// default to nothing selected
 	private var selectedObject: SelectableComponent = null;	// the currently selected object
 	private var interactionMode: int = InteractionMode.None;
+	
+	private var entersPlayObject: EntersPlayEffectStructure = null;
 	
 	// Methods
 	function Start() {
@@ -272,6 +276,12 @@ class InteractionController extends Photon.MonoBehaviour {
 		interactionMode = card.data.targettingMode;
 	}
 	
+	function StructureEntersPlayWithEffect(caller: EntersPlayEffectStructure) {
+	//	entersPlayObject = caller;
+		
+	//	interactionMode = InteractionMode.StructureEntersPlayEffect;
+	}
+	
 	// This method generates a card and then plays it with given targets. Used across networks
 	@RPC
 	function PlayCardAcrossNetwork(cardName: String,targetViewID: int,info: PhotonMessageInfo) {
@@ -287,6 +297,4 @@ class InteractionController extends Photon.MonoBehaviour {
 		// Use card's effect on target
 		cardBeingPlayed.UseAbility(targetObject,info.sender);
 	}
-	
-
 }
