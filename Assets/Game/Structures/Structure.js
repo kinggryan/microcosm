@@ -15,6 +15,8 @@ class Structure extends MonoBehaviour {
 	var structureName: String = "Structure";
 	var helpText:		String = "";
 	
+	var pointValue: int = 0;
+	
 	static var displayStyle : GUIStyle = null;
 
 	var owner: PhotonPlayer;
@@ -28,10 +30,14 @@ class Structure extends MonoBehaviour {
 			displayStyle.fontSize = 18;
 		}
 		
+		// set color
 		if (owner == PhotonNetwork.player)
 			renderer.material.color = Color.blue;
 		else
 			renderer.material.color = Color.red;
+			
+		// add points
+		Scorekeeper.AddScoreForPlayer(pointValue,owner);
 	}
 	
 	function InitializeChildren() {

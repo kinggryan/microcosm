@@ -14,10 +14,13 @@
 class BasicFarm extends Expansion {
 	function Start() {
 		workers = 1;
+		pointValue = 1;
 		
 		structureName = "Basic Farm";
 		
 		helpText = "Workers: "+workers+"\n+1 food";
+		
+		super.Start();
 	}
 
 	// Methods

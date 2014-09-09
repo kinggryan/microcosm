@@ -21,14 +21,16 @@ class BuildBasicColony extends CardData {
 		// make sure you can target the tile
 		var targetTile = target as TileData;
 		
-		if(owner != PhotonNetwork.player || (TurnController.myTurn && TurnController.cardsPlayed == 0 && targetTile.structure == null)) {
+		// play automatically if it was played by another player. Otherwise, make sure it's playable
+		if(owner != PhotonNetwork.player || (TurnController.myTurn && TurnController.coloniesPlayed == 0 && TurnController.expansionsPlayed == 0 && targetTile.structure == null)) {
 			CreateStructure(targetTile,structureObject,owner);
 			
+			// remove card from hand
 			if (owner == PhotonNetwork.player) {
 				var deck = GameObject.Find("ControllerHub").GetComponent(Deck) as Deck;
 				deck.RemoveCardFromHand(card);
 			
-				TurnController.CardPlayed();
+				TurnController.ColonyPlayed();
 			}
 			
 			return true;

@@ -26,19 +26,39 @@ class Deck extends MonoBehaviour {
 			
 		deck = new CardData[30];
 		
+		SetStarterDeck();
+		DrawStartingHand();
+	}
+	
+	function SetStarterDeck() {
+		// Construct Shuffle Indices
+		var remainingCardIndices = ArrayList();
+		for(var index = 0 ; index < 30 ; index++)
+			remainingCardIndices.Add(index);
+	
+				// todo make deck consist of test cards
+		// default card is basic colony
 		for(deckCard in deck)
-			deckCard = new CardData();
+			deckCard = new BuildBasicColony();
+	
+		// ConstructDeck by randomly pulling indices out.
+		for (var test = 0 ; test < 15 ; test++)
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = BuildBasicFarm();
+	}
+	
+	function DrawStartingHand() {
+		var startingHandSize = 5;
 		
-		// Debug Hand	
-		deck[0] = new BuildBasicColony();
-		deck[1] = new BuildBasicFarm();
-		deck[2] = new BuildBasicFarm();
-		
-		// todo make deck consist of test cards
-		
-		DrawCard();
-		DrawCard();
-		DrawCard();
+		for(var cardCount = 0 ; cardCount<startingHandSize ; cardCount++) {
+			DrawCard();
+		}
+	}
+	
+	function RandomIndexFromIndexList(list: ArrayList) : int {
+		var randomNum = Random.Range(0,list.Count);
+		var returnValue = list[randomNum];
+		list.RemoveAt(randomNum);
+		return returnValue;
 	}
 	
 	function DrawCard() {

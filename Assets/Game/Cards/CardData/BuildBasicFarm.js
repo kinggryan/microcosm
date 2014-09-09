@@ -24,14 +24,14 @@ class BuildBasicFarm extends CardData {
 		cost.workers = 1;
 		cost.water = 1;
 		
-		if(owner != PhotonNetwork.player || (TurnController.myTurn && TurnController.cardsPlayed == 0 && targetTile.structure == null && UseResourcesToBuildStructureOnTile(targetTile,cost,owner))) {
+		if(owner != PhotonNetwork.player || (TurnController.myTurn && TurnController.coloniesPlayed == 0 && targetTile.structure == null && UseResourcesToBuildStructureOnTile(targetTile,cost,owner))) {
 			CreateStructure(targetTile,structureObject,owner);
 			
 			if (owner == PhotonNetwork.player) {
 				var deck = GameObject.Find("ControllerHub").GetComponent(Deck) as Deck;
 				deck.RemoveCardFromHand(card);
 			
-				TurnController.CardPlayed();
+				TurnController.ExpansionPlayed();
 			}
 			
 			return true;

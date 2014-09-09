@@ -12,7 +12,8 @@ class TurnController extends Photon.MonoBehaviour {
 	// Properties
 	static var playerUsedGamePieceList: ArrayList;	//	TODO add gamepiecelist for both players
 	static var turnCount: int;
-	static var cardsPlayed: int = 0;
+	static var coloniesPlayed: int = 0;
+	static var expansionsPlayed: int = 0;
 	
 	static var myTurn : boolean = false;
 	static var playerOne: PhotonPlayer;
@@ -42,31 +43,12 @@ class TurnController extends Photon.MonoBehaviour {
 		return playerUsedGamePieceList.Contains(piece);
 	}
 	
-	static function PassTurn() {
-		Debug.Log("Pass Turn");
-	
-		// execute end of turn effects
-		for(var tile in GameObject.FindObjectsOfType(TileData))
-			tile.terrain.EndTurn();
-	
-		// purge used pieces
-		playerUsedGamePieceList.Clear();
-		
-		// reset cards played
-		cardsPlayed = 0;
-			
-		// increment score
-		Scorekeeper.IncreaseScore();	
-		
-		// start new turn
-	//	StructureNetwork.StartTurnForPlayer();
-		
-		// increment turn count
-		turnCount++;
+	static function ColonyPlayed() {
+		coloniesPlayed++;
 	}
 	
-	static function CardPlayed() {
-		cardsPlayed++;
+	static function ExpansionPlayed() {
+		expansionsPlayed++;
 	}
 	
 	@RPC
@@ -74,7 +56,6 @@ class TurnController extends Photon.MonoBehaviour {
 		playerOne = player;
 	
 		if (PhotonNetwork.player == player) {
-			cardsPlayed = 0;
 			myTurn = true;
 		}
 	}
@@ -105,15 +86,18 @@ class TurnController extends Photon.MonoBehaviour {
 	
 	@RPC
 	function PassTurnNetwork() {
-		if (myTurn) {
+		if (myTurn) {	// Pass turn to opponent
 			Debug.Log("Pass Turn");
 	
 			// execute end of turn effects
 			for(var tile in GameObject.FindObjectsOfType(TileData))
 			tile.terrain.EndTurn();
-			
-			// increment score
-			Scorekeeper.IncreaseScore();	
+		
+			// start new turn for opponent
+			if(playerOne != PhotonNetwork.player)
+				StructureNetwork.StartTurnForPlayerOne();
+			else 
+				StructureNetwork.StartTurnForPlayerTwo();
 		
 			// increment turn count
 			turnCount++;
@@ -121,7 +105,7 @@ class TurnController extends Photon.MonoBehaviour {
 			// it's now opponent turn
 			myTurn = false;
 		}
-		else {
+		else {	// Pass turn to this player
 			Debug.Log("Pass Turn");
 	
 			// execute end of turn effects
@@ -135,10 +119,8 @@ class TurnController extends Photon.MonoBehaviour {
 			myTurn = true;
 		
 			// reset cards played
-			cardsPlayed = 0;
-			
-			// increment score
-			Scorekeeper.IncreaseScore();	
+			coloniesPlayed = 0;
+			expansionsPlayed = 0;	
 		
 			// start new turn
 			if(playerOne == PhotonNetwork.player)

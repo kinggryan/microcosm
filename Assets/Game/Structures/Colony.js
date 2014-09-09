@@ -11,6 +11,12 @@ class Colony extends Structure {
 	var popPerFoodRate: int = 0;
 	
 	// Methods
+	function Start() {
+		// add population as score
+		Scorekeeper.AddScoreForPlayer(population,owner);
+		super.Start();
+	}
+	
 	function CreateOrJoinStructureNetwork() {
 		var foundAdjacentNetwork = false;
 	
@@ -40,24 +46,29 @@ class Colony extends Structure {
 		}
 		
 		// add self to the feeding queue of our network
-		Debug.Log("adding to FQ");
 		structureNetwork.feedingQ.AddColony(this);
 	}
 	
 	function FeedAndReturnRemainder(food: int) : int{
-		Debug.Log("Feeding");
 		var remainingFood = food;
 		
 		Debug.Log("Food: " + remainingFood);
 		while(remainingFood > 0 && population != maximumPopulation) {
 			// use a food to increase population
 			remainingFood--;
-			
-			Debug.Log("Decremented food. Population before feed: "+population);
+			var populationChange = population;
 			population += popPerFoodRate;
-			Debug.Log("After pop:  "+population);
+			
+			// cap population
 			if(population > maximumPopulation)
 				population = maximumPopulation;
+				
+			// get change in population
+			populationChange -= population;
+			populationChange *= -1;
+			
+			// add score for new population
+			Scorekeeper.AddScoreForPlayer(populationChange,owner);
 		}
 		
 		RefreshHelpText();

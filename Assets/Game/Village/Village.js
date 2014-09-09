@@ -46,7 +46,7 @@ class Village extends SelectableComponent {
 		might = Random.Range(0,2);
 		
 		// add self to scorekeeper
-		Scorekeeper.AddVillage(this);
+//		Scorekeeper.AddVillage(this);
 	}
 	
 	function DevotionAbility(target: Village) { 
