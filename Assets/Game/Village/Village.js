@@ -26,6 +26,7 @@ class Village extends SelectableComponent {
 	private var selectedColor = Color.yellow;
 	
 	private static var displayStyle:GUIStyle = null;
+	public var lineMaterial: Material;
 	
 	private var selected: boolean = false;
 	
@@ -131,29 +132,6 @@ class Village extends SelectableComponent {
 		
 		popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
 		GUI.Label(popFrame,"H: " + happiness.ToString(),displayStyle);
-		
-		// draw faith
-		/*var faithWorldCoordsPosition = transform.position + .5*Vector3.up;
-		var faithScreenCoords = Camera.main.WorldToScreenPoint(faithWorldCoordsPosition);
-		
-		var faithFrame = Rect(faithScreenCoords.x-20,Screen.height-faithScreenCoords.y,40,25);
-		GUI.Label(faithFrame,"F: " + faith.ToString(),displayStyle);
-		
-		// draw population
-		var popWorldCoordsPosition = transform.position - .5*Vector3.up;
-		var popScreenCoords = Camera.main.WorldToScreenPoint(popWorldCoordsPosition);
-		
-		var popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
-		GUI.Label(popFrame,"Pop: " + population.ToString(),displayStyle);
-		*/
-		
-		
-		// Draw type
-/*		var typeWorldCoordsPosition = transform.position;
-		var typeScreenCoords = Camera.main.WorldToScreenPoint(typeWorldCoordsPosition);
-		
-		var typeFrame = Rect(typeScreenCoords.x-25,Screen.height-typeScreenCoords.y,40,25);
-		GUI.Label(typeFrame,type,displayStyle); */
 	}
 	
 	function AdjustFaith(faithToAdd: int) {
@@ -181,5 +159,46 @@ class Village extends SelectableComponent {
 			faith = population;
 		if (faith < -population)
 			faith = -population;
+	}
+	
+	function InfluenceAndBattleAdjacentVillages() {
+		for(var currentObject in connectedVillages) {
+			// get adjacent village
+			var currentVillage = currentObject as Village;
+			
+			// spread faith and kill enemies
+			if(influence > currentVillage.influence)
+				currentVillage.AdjustFaith(1);
+			if(might > currentVillage.might)
+				currentVillage.AdjustPopulation(-1);
+		}
+	}
+	
+	function DrawVillageConnectionLines() {
+		var lineRenderer : LineRenderer = gameObject.AddComponent(LineRenderer) as LineRenderer;
+					
+		lineRenderer.material = lineMaterial;
+		lineRenderer.SetColors(Color.yellow, Color.yellow);
+		lineRenderer.SetWidth(0.1,0.1);
+		lineRenderer.SetVertexCount(10 * connectedVillages.Count);
+		
+		var currentVillageIndex = 0;
+	
+		for(var currentObject in connectedVillages) {
+			// get adjacent village
+			var currentVillage = currentObject as Village;
+			var currentVillageObject = currentVillage.gameObject;
+			
+			var vertexPosition:Vector3 = transform.position*1.1;
+			for(var i = 0 ;  i < 5 ; i++) {
+				lineRenderer.SetPosition(currentVillageIndex*10 + i,vertexPosition);
+				if( i < 5)
+					vertexPosition = Vector3.RotateTowards(vertexPosition,currentVillageObject.transform.position*1.1,0.32,0.7);
+				else
+					vertexPosition = Vector3.RotateTowards(vertexPosition,transform.position*1.1,0.32,0.7);
+			}
+
+			currentVillageIndex++;
+		}
 	}
 }	

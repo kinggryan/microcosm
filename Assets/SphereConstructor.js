@@ -148,6 +148,7 @@ function BuildSphere() {
 		var nearVillages = currObject.tile.GetAllVillagesInRange(2);
 		
 		currObject.connectedVillages = nearVillages;
+		currObject.DrawVillageConnectionLines();
 	}	
 }
 
