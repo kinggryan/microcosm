@@ -20,6 +20,8 @@ public var villageList: ArrayList;
 // Other mathematical constants that should be modifiable in editor
 public var radius = 3;
 
+private var tileViewID = 1000;
+
 private var vertexAdjacencyLists: ArrayList[];
 private var vertexTileLists: ArrayList[];
 
@@ -230,6 +232,11 @@ function GenerateTile(pointA: Vector3, pointB: Vector3, gameTerrain: GameTerrain
 	
 	// give terrain tile data
 	gameTerrain.tile = tileData;
+	
+	// set tileObject's photon view view id
+	var view = tileObject.GetComponent(PhotonView) as PhotonView;
+	view.viewID = tileViewID++;
+	Debug.Log("setting view");
 	
 	return tileData;
 }
