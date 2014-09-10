@@ -2,11 +2,13 @@
 
 class Scorekeeper extends MonoBehaviour {
 	// Properties
-	private static var score: int = 0;		// todo multiple players
+	private static var myScore: int = 0;		
+	private static var opponentScore: int = 0;
 	private static var scoringVillageList: ArrayList = null;	// tracks all objects that add score
 	
 	// Methods
 	static function AddVillage(village: Object) {
+		// add to list based on whose turn it is
 		if (scoringVillageList == null)
 			scoringVillageList = new ArrayList();
 			
@@ -18,13 +20,19 @@ class Scorekeeper extends MonoBehaviour {
 		for(villageObject in scoringVillageList) {
 			var village = villageObject as Village;
 			
-			score += village.faith;
+			if (village.faith > 0)
+				myScore += village.population;
+			if (village.faith < 0)
+				opponentScore += village.population;
 		}
 	}
 	
 	function OnGUI() {
+		// draw scores
 		var scorePosition = Rect(15,15,80,45);
+		var opponentScorePosition = Rect(15,28,80,45);
 		
-		GUI.Label(scorePosition,"Score: " + score.ToString());
+		GUI.Label(scorePosition,"My Score: " + myScore.ToString());
+		GUI.Label(opponentScorePosition,"Opponent Score: " + opponentScore.ToString());
 	}
 }

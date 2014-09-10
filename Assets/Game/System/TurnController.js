@@ -8,16 +8,24 @@
 	
 	*******/
 	
-class TurnController extends MonoBehaviour {
+class TurnController extends Photon.MonoBehaviour {
 	// Properties
 	static var playerUsedGamePieceList: ArrayList;	//	TODO add gamepiecelist for both players
 	static var turnCount: int;
 	static var cardsPlayed: int = 0;
 	
+	// Networking Properties
+	static var opponent: PhotonPlayer;
+	static var myTurn: boolean = false;
+	
 	// Methods
 	function Start() {
 		turnCount = 1;
 		playerUsedGamePieceList = new ArrayList();
+		
+		// set opponent
+		if (PhotonNetwork.connected)
+			opponent = PhotonNetwork.otherPlayers[0];
 	}
 	
 	// use a given piece
@@ -30,7 +38,19 @@ class TurnController extends MonoBehaviour {
 		return playerUsedGamePieceList.Contains(piece);
 	}
 	
-	static function PassTurn() {
+	function OnGUI() {
+		var passTurnButtonPosition = Rect(105,105,80,45);
+		
+		if (myTurn)
+			if(GUI.Button(passTurnButtonPosition,"Pass Turn")) {
+				PassTurn();
+				photonView.RPC("PassTurn",PhotonTargets.Others);
+			}
+		else
+			GUI.Label(passTurnButtonPosition,"Opponent Turn");
+	}
+	
+	/*static function PassTurn() {
 		Debug.Log("Pass Turn");
 	
 		// execute end of turn effects
@@ -48,6 +68,30 @@ class TurnController extends MonoBehaviour {
 		
 		// increment turn count
 		turnCount++;
+	} */
+	
+	@RPC
+	function PassTurn() {
+		// execute end of turn effects
+		for(var tile in GameObject.FindObjectsOfType(TileData))
+			tile.terrain.EndTurn();
+	
+		// purge used pieces
+		playerUsedGamePieceList.Clear();
+		
+		// reset cards played
+		cardsPlayed = 0;
+			
+		// increment score
+		Scorekeeper.IncreaseScore();	
+		
+		// increment turn count
+		turnCount++;
+		
+		if(myTurn)
+			myTurn = false;
+		else
+			myTurn = true;
 	}
 	
 	static function CardPlayed() {

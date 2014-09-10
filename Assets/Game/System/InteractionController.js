@@ -28,30 +28,15 @@ static class InteractionMode {
 }
 			
 // Interaction Controller class
-class InteractionController extends MonoBehaviour {
+class InteractionController extends Photon.MonoBehaviour {
 	// Properties
 	
 	// default to nothing selected
 	private var selectedObject: SelectableComponent = null;	// the currently selected object
 	private var interactionMode: int = InteractionMode.None;
 	
-	// Methods
-	function OnGUI() {
-		var passTurnButtonPosition = Rect(105,105,80,45);
-		
-		if (GUI.Button(passTurnButtonPosition,"Pass Turn")) {
-			// Deselect
-			if(selectedObject != null) {
-				Debug.Log("Deselecting " + selectedObject);
-				selectedObject.Deselect(true);
-				selectedObject = null;
-			}
-			
-			interactionMode = InteractionMode.None;
-		
-			// pass turn
-			TurnController.PassTurn();
-		}
+	function Start() {
+		photonView.viewID = 3;
 	}
 	
 	function Update() {
@@ -276,5 +261,21 @@ class InteractionController extends MonoBehaviour {
 		selectedObject = card;
 		selectedObject.Select();
 		interactionMode = card.data.targettingMode;
+	}
+	
+	// Called when playing a card across network
+	@RPC
+	function PlayCardAcrossNetwork(cardName: String,targetViewID: int,info: PhotonMessageInfo) {
+		Debug.Log("playing");
+		// get targetted object
+		var targetObject = PhotonView.Find(targetViewID).GetComponent(SelectableComponent) as SelectableComponent;
+		
+		// generate card data
+		var cardType = System.Type.GetType(cardName);
+		var cardBeingPlayed = new cardType() as CardData;
+		Debug.Log("Type : "+cardType+" and card : "+cardBeingPlayed);
+		
+		// Use card's effect on target
+		cardBeingPlayed.UseAbility(targetObject);
 	}
 }
