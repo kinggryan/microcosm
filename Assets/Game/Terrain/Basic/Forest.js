@@ -6,9 +6,11 @@ class TerrainForest extends GameTerrain {
 	// Properties
 	
 	// Methods
-	function Initialize() {
+	function TerrainForest() {
 		name = "Forest";
 		color = Color.green;
 		unwalkable = false;
+		
+		super();
 	}
 }

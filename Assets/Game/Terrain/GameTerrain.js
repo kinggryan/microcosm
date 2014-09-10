@@ -10,12 +10,19 @@ class GameTerrain {
 	// Properties
 	
 	var name: String = "";
-	// Todo add controller:NetworkPlayer propety
+	var isMine: boolean = false;
 	var color:Color = Color.white;	//	Todo change to a texture, rather than color
 	var unwalkable: boolean = false;
 	var tile: TileData = null;
 	
 	// Methods
+	
+	function GameTerrain() {
+		if(TurnController.myTurn)
+			isMine = true;
+		else
+			isMine = false;
+	}
 	
 	function Initialize() { }
 	
