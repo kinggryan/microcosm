@@ -121,6 +121,7 @@ class TurnController extends Photon.MonoBehaviour {
 			
 			// your turn
 			myTurn = true;
+			Debug.Log(myTurn);
 		
 			// reset cards played
 			coloniesPlayed = 0;
