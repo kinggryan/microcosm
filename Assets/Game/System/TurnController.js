@@ -103,8 +103,12 @@ class TurnController extends Photon.MonoBehaviour {
 		
 		if(myTurn)
 			myTurn = false;
-		else
+		else {
 			myTurn = true;
+		
+			var deck = GameObject.FindObjectOfType(Deck) as Deck;
+			deck.DrawCard();	
+		}
 	}
 	
 	static function CardPlayed() {

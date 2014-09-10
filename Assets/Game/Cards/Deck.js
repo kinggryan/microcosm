@@ -19,7 +19,7 @@ class Deck extends MonoBehaviour {
 	// Methods
 	function Start() {
 		//initialize deck and hand
-		hand = new Card[5];
+		hand = new Card[6];
 		
 		for(card in hand)
 			card = null;
@@ -41,9 +41,11 @@ class Deck extends MonoBehaviour {
 	}
 	
 	function DrawCard() {
-		hand[numberOfCardsInHand++] = GenerateCardObject(deck[currentCardIndex++]);
+		if(numberOfCardsInHand < 6) {
+			hand[numberOfCardsInHand++] = GenerateCardObject(deck[currentCardIndex++]);
 		
-		LayoutHand();
+			LayoutHand();
+		}
 	}
 	
 	function GenerateCardObject(data: CardData) : Card {

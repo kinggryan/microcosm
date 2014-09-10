@@ -111,11 +111,17 @@ class InteractionController extends Photon.MonoBehaviour {
 			break;
 			
 		case InteractionMode.CardTargettingVillage:
+			// if not my turn, don't play the card
+			if (!TurnController.myTurn)
+				break;
+			
 			// cast as card
 			var card = selectedObject as Card;
 			
 			// call ability. If it was a success, deselect; otherwise, don't
 			if (card.UseAbility(village)) {
+				var targetView = village.GetComponent(PhotonView) as PhotonView;
+				photonView.RPC("PlayCardAcrossNetwork",PhotonTargets.Others,card.GetCardDataName(),targetView.viewID);
 				interactionMode = InteractionMode.None;
 				
 				// have button call deselect on follower
@@ -221,6 +227,9 @@ class InteractionController extends Photon.MonoBehaviour {
 			break;
 			
 		case InteractionMode.CardTargettingTerrain:
+			if (!TurnController.myTurn)
+				break;
+		
 			// cast as card
 			var card = selectedObject as Card;
 			
@@ -266,14 +275,13 @@ class InteractionController extends Photon.MonoBehaviour {
 	// Called when playing a card across network
 	@RPC
 	function PlayCardAcrossNetwork(cardName: String,targetViewID: int,info: PhotonMessageInfo) {
-		Debug.Log("playing");
+		Debug.Log("Opponent played card");
 		// get targetted object
 		var targetObject = PhotonView.Find(targetViewID).GetComponent(SelectableComponent) as SelectableComponent;
 		
 		// generate card data
 		var cardType = System.Type.GetType(cardName);
 		var cardBeingPlayed = new cardType() as CardData;
-		Debug.Log("Type : "+cardType+" and card : "+cardBeingPlayed);
 		
 		// Use card's effect on target
 		cardBeingPlayed.UseAbility(targetObject);

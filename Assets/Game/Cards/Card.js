@@ -43,4 +43,8 @@ class Card extends SelectableComponent {
 		GUI.Label(nameRect,data.cardName);
 		GUI.Label(textRect,data.text);
 	}
+	
+	function GetCardDataName() : String {
+		return data.ToString();
+	}
 }

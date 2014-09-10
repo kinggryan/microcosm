@@ -6,7 +6,7 @@ class TerrainOcean extends GameTerrain {
 	// Properties
 	
 	// Methods
-	function TerrainOcean() {
+	function Initialize() {
 		name = "Ocean";
 		color = Color.blue;
 		unwalkable = true;

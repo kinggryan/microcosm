@@ -32,6 +32,8 @@ class Village extends SelectableComponent {
 	
 	protected static var devotedMinimum = 3;
 	
+	private static var villageIDNumber = 500;
+	
 	// Methods
 	function Start() {
 		renderer.material.color = color;
@@ -48,6 +50,8 @@ class Village extends SelectableComponent {
 		
 		// add self to scorekeeper
 		Scorekeeper.AddVillage(this);
+		
+		photonView.viewID = villageIDNumber++;
 	}
 	
 	function DevotionAbility(target: Village) { 
@@ -145,6 +149,14 @@ class Village extends SelectableComponent {
 			faith = population;
 		if (faith < -population)
 			faith = population;
+			
+		// change color based on faith
+		if (faith < 0)
+			renderer.material.color = Color.red;
+		else if (faith > 0)
+			renderer.material.color = Color.blue;
+		else
+			renderer.material.color = Color.gray;
 	}
 	
 	function AdjustPopulation(populationToAdd: int) {

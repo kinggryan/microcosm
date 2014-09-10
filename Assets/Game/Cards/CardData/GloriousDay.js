@@ -21,14 +21,19 @@ class GloriousDay extends CardData {
 		// make sure you can target the village
 		var targetVillage = target as Village;
 		
-		if(TurnController.cardsPlayed == 0) {
+		if(!TurnController.myTurn || TurnController.cardsPlayed == 0) {
 			// add faith
-			targetVillage.AdjustFaith(2);
+			if(TurnController.myTurn)
+				targetVillage.AdjustFaith(2);
+			else
+				targetVillage.AdjustFaith(-2);
 			
-			// send card played messages
-			var deck = GameObject.Find("ControllerHub").GetComponent(Deck) as Deck;
-			deck.RemoveCardFromHand(card);
-			TurnController.CardPlayed();
+			if (TurnController.myTurn) {
+				// send card played messages
+				var deck = GameObject.Find("ControllerHub").GetComponent(Deck) as Deck;
+				deck.RemoveCardFromHand(card);
+				TurnController.CardPlayed();
+			}
 			
 			return true;
 		}
