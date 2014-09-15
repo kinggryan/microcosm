@@ -15,6 +15,7 @@ class CardData extends Object {
 	var targettingMode: int = InteractionMode.None;
 	
 	var card: Card = null;
+	var powerCost: int = 0;
 	
 	// Methods
 	function UseAbility(target: SelectableComponent) : boolean {}

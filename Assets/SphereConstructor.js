@@ -78,7 +78,7 @@ function BuildSphere() {
 			else if (index == 4)
 				milTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
 			else 
-				mercTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+				DrawTile(keyPoints,0,index,new TerrainOcean());
 		else
 			DrawTile(keyPoints,0,index,new TerrainOcean());
 			
@@ -98,7 +98,7 @@ function BuildSphere() {
 			else if (index == 10)
 				milTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
 			else
-				mercTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				DrawTile(keyPoints,6,index,new TerrainOcean());
 		else
 			DrawTile(keyPoints,6,index,new TerrainOcean());
 		
@@ -112,7 +112,7 @@ function BuildSphere() {
 	
 	// Draw middle tiles
 	aggTiles.Add(DrawTile(keyPoints,1,10,new TerrainForest()));
-	mercTiles.Add(DrawTile(keyPoints,2,11,new TerrainForest()));
+	DrawTile(keyPoints,2,11,new TerrainForest());
 	DrawTile(keyPoints,3,7,new TerrainOcean());
 	DrawTile(keyPoints,4,8,new TerrainForest());
 	milTiles.Add(DrawTile(keyPoints,5,9,new TerrainForest()));
@@ -121,7 +121,7 @@ function BuildSphere() {
 	DrawTile(keyPoints,2,10,new TerrainForest());
 	milTiles.Add(DrawTile(keyPoints,3,11,new TerrainForest()));
 	aggTiles.Add(DrawTile(keyPoints,4,7,new TerrainForest()));
-	mercTiles.Add(DrawTile(keyPoints,5,8,new TerrainForest()));
+	DrawTile(keyPoints,5,8,new TerrainForest());
 	
 	
 	// Add Villages
@@ -147,10 +147,7 @@ function BuildSphere() {
 	
 	// connect villages
 	for (var currObject:Village in villageList) {
-		var nearVillages = currObject.tile.GetAllVillagesInRange(2);
-		
-		currObject.connectedVillages = nearVillages;
-		currObject.DrawVillageConnectionLines();
+		currObject.ConnectToVillagesInRange();
 	}	
 }
 

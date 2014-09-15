@@ -30,7 +30,7 @@ class Scorekeeper extends MonoBehaviour {
 	function OnGUI() {
 		// draw scores
 		var scorePosition = Rect(15,15,80,45);
-		var opponentScorePosition = Rect(15,28,80,45);
+		var opponentScorePosition = Rect(15,28,80,70);
 		
 		GUI.Label(scorePosition,"My Score: " + myScore.ToString());
 		GUI.Label(opponentScorePosition,"Opponent Score: " + opponentScore.ToString());

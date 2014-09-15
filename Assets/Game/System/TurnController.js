@@ -83,12 +83,14 @@ class TurnController extends Photon.MonoBehaviour {
 	
 	@RPC
 	function PassTurn() {
+		// END TURN EFFECTS 
+		
 		Debug.Log("Turn");
 	
 		// execute end of turn effects
 		for(var tile in GameObject.FindObjectsOfType(TileData))
 			tile.terrain.EndTurn();
-	
+		
 		// purge used pieces
 		playerUsedGamePieceList.Clear();
 		
@@ -98,6 +100,10 @@ class TurnController extends Photon.MonoBehaviour {
 		// increment score
 		Scorekeeper.IncreaseScore();	
 		
+		//						//
+		// START TURN EFFECTS	//
+		//						//
+		
 		// increment turn count
 		turnCount++;
 		
@@ -106,8 +112,21 @@ class TurnController extends Photon.MonoBehaviour {
 		else {
 			myTurn = true;
 		
+			// draw a card
 			var deck = GameObject.FindObjectOfType(Deck) as Deck;
-			deck.DrawCard();	
+			deck.DrawCard();
+			
+			// add and refresh power
+			ResourceController.StartTurn();	
+		}
+		
+		// spread influence and strength
+		for (var currentVillage:Village in GameObject.FindObjectsOfType(Village)) {
+			currentVillage.InfluenceAndBattleAdjacentVillages();
+		}
+		
+		for (var currentVillage:Village in GameObject.FindObjectsOfType(Village)) {
+			currentVillage.ChangeFaithAndPopulationForTurnStart();
 		}
 	}
 	

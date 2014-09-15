@@ -28,6 +28,10 @@ class GloriousDay extends CardData {
 			else
 				targetVillage.AdjustFaith(-2);
 			
+			Debug.Log("adjusting");
+			targetVillage.AdjustInfluence(1);
+			targetVillage.AdjustMight(1);
+			
 			if (TurnController.myTurn) {
 				// send card played messages
 				var deck = GameObject.Find("ControllerHub").GetComponent(Deck) as Deck;

@@ -17,12 +17,13 @@ class TileData extends SelectableComponent {
 	public var tileCenter: Vector3;
 	public var village: Village;
 	public var followers: ArrayList;
-	// village:
+	public var showText: boolean = false;
 
 	// Static Properties
 	public static var followerRowOffset = Vector3.right*0.5;
 	private static var visitedTiles: ArrayList;
 	private static var foundVillages: ArrayList;
+	private static var displayStyle:GUIStyle = null;
 
 	// End Properties
 
@@ -31,6 +32,13 @@ class TileData extends SelectableComponent {
 	function Start() {
 		// Set rendering info to terrain
 		terrain.SetGraphics(renderer);
+		
+		// set display style
+		if (displayStyle == null) {
+			displayStyle = GUIStyle();
+			displayStyle.fontSize = 14;
+			displayStyle.wordWrap = true;
+		}
 	}
 
 	// adds a tile to the end of the adjacent tile array
@@ -155,5 +163,88 @@ class TileData extends SelectableComponent {
 		
 		// else, we didn't find it so return false
 		return;
+	}
+	
+	function OnMouseEnter() {
+		showText = true;
+	}
+	
+	function OnMouseExit() {
+		showText = false;
+	}
+	
+	function OnGUI() {
+		if (showText) {
+			var textScreenOrigin = Camera.main.WorldToScreenPoint(tileCenter);
+			textScreenOrigin.y = Screen.height - textScreenOrigin.y;
+			
+			var textRect = Rect(textScreenOrigin.x - 45,textScreenOrigin.y-30,90,100);
+			
+			GUI.Label(textRect,terrain.helpText,displayStyle);
+		}
+		
+		if (!Physics.Linecast(1.1*tileCenter,Camera.main.transform.position) && displayStyle != null) {
+			// Draw resources
+			var localizationRotation = Quaternion.FromToRotation(Vector3.up,tileCenter.normalized);
+			var drawDirection = localizationRotation*Vector3.right*0.4;
+			var rotation = Quaternion.AngleAxis(360/5,tileCenter);
+	
+			// draw wood
+			if(terrain.wood > 0) {
+	//			Debug.Log("Font is null " + (displayStyle.font == null));
+//				displayStyle.font.material.color = Color(1,1,0);
+				var worldCoords = tileCenter+drawDirection;
+				var screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+		
+				var frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"W: " + terrain.wood.ToString(),displayStyle);
+				drawDirection = rotation*drawDirection;
+			}
+		
+			// Draw metal
+			if(terrain.metal > 0) {
+//				displayStyle.font.material.color = Color.gray;
+				worldCoords = tileCenter+drawDirection;
+				screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+		
+				frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"M: " + terrain.metal.ToString(),displayStyle);
+				drawDirection = rotation*drawDirection;
+			}
+		
+			// Draw grain
+			if(terrain.grain > 0) {
+//				displayStyle.font.material.color = Color.yellow;
+				worldCoords = tileCenter+drawDirection;
+				screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+			
+				frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"G: " + terrain.grain.ToString(),displayStyle);
+				drawDirection = rotation*drawDirection;
+			}
+		
+			// Draw clay
+			if(terrain.clay > 0) {
+	//			displayStyle.font.material.color = Color(0.9,0.6,0);
+				worldCoords = tileCenter+drawDirection;
+				screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+		
+				frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"C: " + terrain.clay.ToString(),displayStyle);
+				drawDirection = rotation*drawDirection;
+			}
+		
+			// Draw jewels
+			if(terrain.jewels > 0) {
+//				displayStyle.font.material.color = Color.white;
+				worldCoords = tileCenter+drawDirection;
+				screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+		
+				frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"J: " + terrain.jewels.ToString(),displayStyle);
+			}
+			
+//displayStyle.font.material.color = Color.black;
+		}
 	}
 }

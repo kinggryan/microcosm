@@ -16,8 +16,17 @@ class Village extends SelectableComponent {
 	public var might: int = 0;
 	public var happiness: int = 0;
 	
+	public var startTurnPopulationChange: int = 0;
+	public var startTurnFaithChange: int = 0;
+	
 	public var connectedVillages: ArrayList = null;
 	// End new stuff
+	
+	public var level: int = 0;
+	public var resourcesNeeded: String[] = null;
+	private static var resourceNames: String[] = ["wood","metal","grain","clay","jewels"];
+	public var altarCount: int = 0;
+	public var progressRemaining: int = 8;
 	
 	public var tile: TileData;
 	
@@ -44,14 +53,22 @@ class Village extends SelectableComponent {
 			displayStyle.fontSize = 18;
 		}
 		
+		// set view id
+		photonView.viewID = villageIDNumber++;
+		
 		// set might and influence
-		influence = Random.Range(0,2);
-		might = Random.Range(0,2);
+		if (PhotonNetwork.isMasterClient ) {
+			influence = Random.Range(0,2);
+			might = Random.Range(0,2);
+			
+			photonView.RPC("InitializeMightAndInfluence",PhotonTargets.Others,might,influence);
+		}
 		
 		// add self to scorekeeper
 		Scorekeeper.AddVillage(this);
 		
-		photonView.viewID = villageIDNumber++;
+		// initialize resources
+		ChangeResources();
 	}
 	
 	function DevotionAbility(target: Village) { 
@@ -143,20 +160,28 @@ class Village extends SelectableComponent {
 		if (faith <= 0 && faithToAdd > 0)
 			TurnController.UsePiece(this);
 	
+		// adjust faith
 		faith += faithToAdd;
 		
+		// cap faith
 		if (faith > population)
 			faith = population;
 		if (faith < -population)
 			faith = population;
 			
 		// change color based on faith
-		if (faith < 0)
+		if (faith < 0) {
 			renderer.material.color = Color.red;
-		else if (faith > 0)
+			color = Color.red;
+		}
+		else if (faith > 0) {
 			renderer.material.color = Color.blue;
-		else
+			color = Color.blue;
+		}
+		else {
 			renderer.material.color = Color.gray;
+			color = Color.gray;
+		}
 	}
 	
 	function AdjustPopulation(populationToAdd: int) {
@@ -166,29 +191,82 @@ class Village extends SelectableComponent {
 		if (population < 0)
 			population = 0;
 			
-		// cap faith
-		if (faith > population)
-			faith = population;
-		if (faith < -population)
-			faith = -population;
+		// cap faith, strength, and influence
+		faith = Mathf.Clamp(faith,-population,population);
+		influence = Mathf.Clamp(influence,-population,population);
+		might = Mathf.Clamp(might,-population,population);
+	}
+	
+	function AdjustInfluence(influenceToAdd: int) {
+		Debug.Log("adjusting");
+		// adjust might
+		influence += influenceToAdd;
+		
+		// cap might
+		influence = Mathf.Clamp(influence,0,population);
+	}
+	
+	function AdjustMight(mightToAdd: int) {
+		// adjust might
+		might += mightToAdd;
+		
+		// cap might
+		might = Mathf.Clamp(might,0,population);
+	}
+	
+	function AdjustHappiness(happinessToAdd: int) {
+		// adjust might
+		happiness += happinessToAdd;
+		
+		// cap might
+		happiness = Mathf.Clamp(happinessToAdd,-population,population);
 	}
 	
 	function InfluenceAndBattleAdjacentVillages() {
-		for(var currentObject in connectedVillages) {
-			// get adjacent village
-			var currentVillage = currentObject as Village;
+		if (faith > 0 && TurnController.myTurn) {
+			for(var currentObject in connectedVillages) {
+				// get adjacent village
+				var currentVillage = currentObject as Village;
 			
-			// spread faith and kill enemies
-			if(influence > currentVillage.influence)
-				currentVillage.AdjustFaith(1);
-			if(might > currentVillage.might)
-				currentVillage.AdjustPopulation(-1);
+				// spread faith and kill enemies
+				if(happiness > 0 && influence > currentVillage.influence)
+					currentVillage.startTurnFaithChange += 1;
+				if(happiness < 0 && might > currentVillage.might && currentVillage.faith <= 0)
+					currentVillage.startTurnPopulationChange -= 1;
+			}
+		}
+		if (faith < 0 && !TurnController.myTurn) {
+			for(var currentObject in connectedVillages) {
+				// get adjacent village
+				var currentVillage2 = currentObject as Village;
+			
+				// spread faith and kill enemies
+				if(happiness > 0 && influence > currentVillage2.influence)
+					currentVillage2.startTurnFaithChange -= 1;
+				if(happiness < 0 && might > currentVillage2.might && currentVillage2.faith >= 0)
+					currentVillage2.startTurnPopulationChange -= 1;
+			}
 		}
 	}
 	
+	function ChangeFaithAndPopulationForTurnStart() {
+		AdjustFaith(startTurnFaithChange);
+		AdjustPopulation(startTurnPopulationChange);
+		
+		startTurnFaithChange = 0;
+		startTurnPopulationChange = 0;
+	}
+	
 	function DrawVillageConnectionLines() {
-		var lineRenderer : LineRenderer = gameObject.AddComponent(LineRenderer) as LineRenderer;
-					
+		var lineRenderer: LineRenderer;
+	
+		// create new line renderer or get old one
+		if (GetComponent(LineRenderer) == null)
+			lineRenderer = gameObject.AddComponent(LineRenderer) as LineRenderer;
+		else
+			lineRenderer = gameObject.GetComponent(LineRenderer) as LineRenderer;
+				
+		// set its appearance		
 		lineRenderer.material = lineMaterial;
 		lineRenderer.SetColors(Color.yellow, Color.yellow);
 		lineRenderer.SetWidth(0.1,0.1);
@@ -212,5 +290,80 @@ class Village extends SelectableComponent {
 
 			currentVillageIndex++;
 		}
+	}
+	
+	function ConnectToVillagesInRange() {
+		var range = 3;
+		
+		var nearVillages = tile.GetAllVillagesInRange(range);
+		
+		connectedVillages = nearVillages;
+		DrawVillageConnectionLines();
+	}
+	
+	function LevelUp() {
+		// if we are level 0 or 1, we always level up. If level 2, make sure altar count is 0, ie this is still neutral
+		if(progressRemaining <= 0 && level < 2 || (altarCount == 0)) {
+			// if faithful in either direction:
+			//	-increase / decrease altar count
+			//	- increase level
+			//	- change resources
+			//	- reset faith
+			//	- if altarCount is > 1 or < -1, tell scorekeeper
+			if (faith == 0) {
+				progressRemaining = 0;
+				return;
+			}
+				
+			if(faith > 0) {
+				altarCount++;
+				faith = 2;
+			}
+			else if (faith < 0) {
+				altarCount--;
+				faith = -2;
+			}
+			
+			level++;
+			ChangeResources();
+			progressRemaining = 8 + 4*level;
+			
+			if (altarCount == 2) {
+				// todo tell scorekeeper
+			}
+			else if (altarCount == -2) {
+				// tell scorekeeper
+			}
+		}
+	}
+	
+	function ChangeResources() {
+		// Create indices for randomness
+		var indexList = ArrayList();
+		for(var i = 0 ; i < 5 ; i++)
+			indexList.Add(i);
+		
+		var numberOfNeededResources: int = 0;
+		if(level == 0)
+			numberOfNeededResources = 2;
+		else
+			numberOfNeededResources = 3;
+		
+		// refresh resources array
+		resourcesNeeded = new String[numberOfNeededResources];
+		
+		// generate needed resources
+		for(var resourceIndex = 0; resourceIndex < numberOfNeededResources; resourceIndex++) {
+			var index = Random.Range(0,indexList.Count);
+			indexList.RemoveAt(index);
+			
+			resourcesNeeded[resourceIndex] = resourceNames[index];
+		}
+	}
+	
+	@RPC
+	function InitializeMightAndInfluence(mightSet : int, influenceSet:int) {
+		might = mightSet;
+		influence = influenceSet;
 	}
 }	
