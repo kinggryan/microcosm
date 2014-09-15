@@ -24,6 +24,8 @@ class TileData extends SelectableComponent {
 	private static var visitedTiles: ArrayList;
 	private static var foundVillages: ArrayList;
 	private static var displayStyle:GUIStyle = null;
+	
+	private static var IDNumber = 400;
 
 	// End Properties
 
@@ -39,6 +41,9 @@ class TileData extends SelectableComponent {
 			displayStyle.fontSize = 14;
 			displayStyle.wordWrap = true;
 		}
+		
+		// set photonView id
+		photonView.viewID = IDNumber++;
 	}
 
 	// adds a tile to the end of the adjacent tile array

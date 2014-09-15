@@ -75,8 +75,7 @@ class TurnController extends Photon.MonoBehaviour {
 		// execute end of turn effects and give resources
 		for(var tile in GameObject.FindObjectsOfType(TileData)) {
 			tile.terrain.EndTurn();
-			if(tile.terrain.isMine == myTurn)
-				tile.terrain.GiveResourcesToAdjacentVillages();
+			tile.terrain.GiveResourcesToAdjacentVillages();
 		}
 		
 		// level up villages

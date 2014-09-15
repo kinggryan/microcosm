@@ -135,12 +135,6 @@ class Village extends SelectableComponent {
 	
 		// adjust faith
 		faith += faithToAdd;
-		
-		// cap faith
-		if (faith > population)
-			faith = population;
-		if (faith < -population)
-			faith = population;
 	}
 	
 	function LevelUp() {
@@ -194,6 +188,10 @@ class Village extends SelectableComponent {
 	}
 	
 	function ChangeResources() {
+		// never change resources execept on master client
+		if(!PhotonNetwork.isMasterClient)
+			return;
+		
 		resourcesNeededString = "";
 	
 		// Create indices for randomness
@@ -218,6 +216,24 @@ class Village extends SelectableComponent {
 			resourcesNeeded[resourceIndex] = resourceNames[index];
 			resourcesNeededString += resourceNames[index][0] + " ";
 		}
+		
+		if(PhotonNetwork.connected)
+			if(numberOfNeededResources > 2)
+				photonView.RPC("SetResources",PhotonTargets.Others,numberOfNeededResources,resourcesNeeded[0],resourcesNeeded[1],resourcesNeeded[2],resourcesNeededString);
+			else
+				photonView.RPC("SetResources",PhotonTargets.Others,numberOfNeededResources,resourcesNeeded[0],resourcesNeeded[1],null,resourcesNeededString);
+	}
+	
+	@RPC
+	function SetResources(count: int, resource1: String,resource2: String,resource3: String,resourceString: String) {
+		resourcesNeeded = new String[count];
+		resourcesNeeded[0] = resource1;
+		resourcesNeeded[1] = resource2;
+		
+		if (count > 2)
+			resourcesNeeded[2] = resource3;
+		
+		resourcesNeededString = resourceString;
 	}
 	
 	@RPC

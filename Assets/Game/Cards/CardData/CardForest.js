@@ -26,7 +26,7 @@ class ForestCard extends CardData {
 		// make sure you can target the village
 		var targetTile = target as TileData;
 		
-		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost) && IsInRange(targetTile))) {
+		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost + targetTile.powerCost) && IsInRange(targetTile))) {
 			// change tile terrain to forest
 			targetTile.terrain = new GameTerrain();
 			targetTile.terrain.tile = targetTile;

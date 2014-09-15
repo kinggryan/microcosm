@@ -148,6 +148,12 @@ class InteractionController extends Photon.MonoBehaviour {
 			if (card.UseAbility(terrain)) {
 				interactionMode = InteractionMode.None;
 				
+				// tell other player what we've done
+				if(PhotonNetwork.connected) {
+					var targetView = terrain.GetComponent(PhotonView) as PhotonView;
+					photonView.RPC("PlayCardAcrossNetwork",PhotonTargets.Others,card.GetCardDataName(),targetView.viewID);
+				}
+				
 				// if the card is still in hand after being played, deselect it
 				if(card != null)
 					card.Deselect(true);
