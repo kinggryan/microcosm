@@ -73,10 +73,20 @@ function BuildSphere() {
 	// Draw tiles for top half of sphere
 	for (var index = 1; index <= 5; index++) {
 		if (index < 3 || index == 4)
-			if (index == 1)
-				aggTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
-			else if (index == 4)
-				milTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+			if (index == 1) {
+				var newTile1 = DrawTile(keyPoints,0,index,new TerrainForest());
+				aggTiles.Add(newTile1);
+				
+				if(PhotonNetwork.isMasterClient)
+					TurnController.playerOrigin = newTile1;
+			}
+			else if (index == 4) {
+				var newTile2 = DrawTile(keyPoints,0,index,new TerrainForest());
+				milTiles.Add(newTile2);
+				
+				if(!PhotonNetwork.isMasterClient)
+					TurnController.playerOrigin = newTile2;
+			}
 			else 
 				DrawTile(keyPoints,0,index,new TerrainOcean());
 		else
@@ -143,11 +153,6 @@ function BuildSphere() {
 	// connect tiles
 	for (var vertex = 0 ; vertex < 12; vertex++) {
 		ConnectAllEdgesOfVertex(vertex);
-	}
-	
-	// connect villages
-	for (var currObject:Village in villageList) {
-		currObject.ConnectToVillagesInRange();
 	}	
 }
 
@@ -281,14 +286,4 @@ function PlaceVillageOnTile(tile: TileData, village: GameObject) {
 	
 	// add to village list
 	villageList.Add(villageData);
-}
-
-function PlaceFollowerOnTile(tile: TileData, follower: GameObject) {
-	// have tile palce follower
-	tile.followers.Add(follower);
-	tile.PlaceFollowers();
-	
-	// point at each other
-	var followerData = follower.GetComponent(Follower) as Follower;
-	followerData.tile = tile;
 }

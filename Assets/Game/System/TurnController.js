@@ -18,6 +18,8 @@ class TurnController extends Photon.MonoBehaviour {
 	static var opponent: PhotonPlayer;
 	static var myTurn: boolean = false;
 	
+	static var playerOrigin: TileData = null;	// this is used for determining Card Range
+	
 	// Methods
 	function Start() {
 		turnCount = 1;
@@ -36,6 +38,9 @@ class TurnController extends Photon.MonoBehaviour {
 			else
 				photonView.RPC("GoFirst",PhotonTargets.Others);
 		}
+		
+		// for DEBUG
+		playerOrigin.terrain.color = Color.magenta;
 	}
 	
 	// use a given piece
@@ -61,44 +66,29 @@ class TurnController extends Photon.MonoBehaviour {
 			GUI.Label(passTurnButtonPosition,"Opponent Turn");
 	}
 	
-	/*static function PassTurn() {
-		Debug.Log("Pass Turn");
-	
-		// execute end of turn effects
-		for(var tile in GameObject.FindObjectsOfType(TileData))
-			tile.terrain.EndTurn();
-	
-		// purge used pieces
-		playerUsedGamePieceList.Clear();
-		
-		// reset cards played
-		cardsPlayed = 0;
-			
-		// increment score
-		Scorekeeper.IncreaseScore();	
-		
-		// increment turn count
-		turnCount++;
-	} */
-	
 	@RPC
 	function PassTurn() {
 		// END TURN EFFECTS 
 		
 		Debug.Log("Turn");
 	
-		// execute end of turn effects
-		for(var tile in GameObject.FindObjectsOfType(TileData))
+		// execute end of turn effects and give resources
+		for(var tile in GameObject.FindObjectsOfType(TileData)) {
 			tile.terrain.EndTurn();
+			if(tile.terrain.isMine == myTurn)
+				tile.terrain.GiveResourcesToAdjacentVillages();
+		}
+		
+		// level up villages
+		for(var village in GameObject.FindObjectsOfType(Village)) {
+			village.LevelUp();
+		}
 		
 		// purge used pieces
 		playerUsedGamePieceList.Clear();
 		
 		// reset cards played
 		cardsPlayed = 0;
-			
-		// increment score
-		Scorekeeper.IncreaseScore();	
 		
 		//						//
 		// START TURN EFFECTS	//
@@ -119,15 +109,6 @@ class TurnController extends Photon.MonoBehaviour {
 			// add and refresh power
 			ResourceController.StartTurn();	
 		}
-		
-		// spread influence and strength
-		for (var currentVillage:Village in GameObject.FindObjectsOfType(Village)) {
-			currentVillage.InfluenceAndBattleAdjacentVillages();
-		}
-		
-		for (var currentVillage:Village in GameObject.FindObjectsOfType(Village)) {
-			currentVillage.ChangeFaithAndPopulationForTurnStart();
-		}
 	}
 	
 	static function CardPlayed() {
@@ -137,5 +118,6 @@ class TurnController extends Photon.MonoBehaviour {
 	@RPC
 	function GoFirst() {
 		myTurn = true;
+		ResourceController.StartTurn();
 	}
 }

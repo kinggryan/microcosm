@@ -15,16 +15,11 @@ class Scorekeeper extends MonoBehaviour {
 		scoringVillageList.Add(village);
 	}
 	
-	static function IncreaseScore() {
-		// iterate through villages and add population to score
-		for(villageObject in scoringVillageList) {
-			var village = villageObject as Village;
-			
-			if (village.faith > 0 && TurnController.myTurn)
-				myScore += village.population;
-			if (village.faith < 0 && !TurnController.myTurn)
-				opponentScore += village.population;
-		}
+	static function GiveScore(score: int) {
+		if(score > 0)
+			myScore += score;
+		else
+			opponentScore -= score;
 	}
 	
 	function OnGUI() {

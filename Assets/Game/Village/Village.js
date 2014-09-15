@@ -25,6 +25,7 @@ class Village extends SelectableComponent {
 	public var level: int = 0;
 	public var resourcesNeeded: String[] = null;
 	private static var resourceNames: String[] = ["wood","metal","grain","clay","jewels"];
+	private var resourcesNeededString: String = null;
 	public var altarCount: int = 0;
 	public var progressRemaining: int = 8;
 	
@@ -69,6 +70,7 @@ class Village extends SelectableComponent {
 		
 		// initialize resources
 		ChangeResources();
+		progressRemaining = 8;
 	}
 	
 	function DevotionAbility(target: Village) { 
@@ -111,48 +113,19 @@ class Village extends SelectableComponent {
 	
 	// Draws the faith and population
 	function DrawStats() {
-		// CHANGES
-		var drawDirection = Vector3.right;
-		var rotation = Quaternion.AngleAxis(360/5,Vector3.up);
-	
-		// draw faith
-		var faithWorldCoordsPosition = transform.TransformPoint(drawDirection);
-		var faithScreenCoords = Camera.main.WorldToScreenPoint(faithWorldCoordsPosition);
+		// draw resources
+		var screenCoords = Camera.main.WorldToScreenPoint(transform.position);
 		
-		var faithFrame = Rect(faithScreenCoords.x-20,Screen.height-faithScreenCoords.y,40,25);
-		GUI.Label(faithFrame,"F: " + faith.ToString(),displayStyle);
-		drawDirection = rotation*drawDirection;
+		var frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y+20,40,25);
+		GUI.Label(frame,resourcesNeededString,displayStyle);
 		
-		// Draw population
-		var popWorldCoordsPosition = transform.TransformPoint(drawDirection);
-		var popScreenCoords = Camera.main.WorldToScreenPoint(popWorldCoordsPosition);
-		
-		var popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
-		GUI.Label(popFrame,"P: " + population.ToString(),displayStyle);
-		drawDirection = rotation*drawDirection;
-		
-		// Draw Might
-		popWorldCoordsPosition = transform.TransformPoint(drawDirection);
-		popScreenCoords = Camera.main.WorldToScreenPoint(popWorldCoordsPosition);
-		
-		popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
-		GUI.Label(popFrame,"M: " + might.ToString(),displayStyle);
-		drawDirection = rotation*drawDirection;
-		
-		// Draw Influence
-		popWorldCoordsPosition = transform.TransformPoint(drawDirection);
-		popScreenCoords = Camera.main.WorldToScreenPoint(popWorldCoordsPosition);
-		
-		popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
-		GUI.Label(popFrame,"I: " + influence.ToString(),displayStyle);
-		drawDirection = rotation*drawDirection;
-		
-		// Draw Happiness
-		popWorldCoordsPosition = transform.TransformPoint(drawDirection);
-		popScreenCoords = Camera.main.WorldToScreenPoint(popWorldCoordsPosition);
-		
-		popFrame = Rect(popScreenCoords.x-25,Screen.height-popScreenCoords.y,40,25);
-		GUI.Label(popFrame,"H: " + happiness.ToString(),displayStyle);
+		// draw level and faith
+		frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y-20,40,25);
+		GUI.Label(frame,"L:"+level+" F:"+faith,displayStyle);
+
+		// draw progress remaining
+		frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y+0,40,25);
+		GUI.Label(frame,"PR: "+progressRemaining,displayStyle);
 	}
 	
 	function AdjustFaith(faithToAdd: int) {
@@ -168,142 +141,11 @@ class Village extends SelectableComponent {
 			faith = population;
 		if (faith < -population)
 			faith = population;
-			
-		// change color based on faith
-		if (faith < 0) {
-			renderer.material.color = Color.red;
-			color = Color.red;
-		}
-		else if (faith > 0) {
-			renderer.material.color = Color.blue;
-			color = Color.blue;
-		}
-		else {
-			renderer.material.color = Color.gray;
-			color = Color.gray;
-		}
-	}
-	
-	function AdjustPopulation(populationToAdd: int) {
-		population += populationToAdd;
-		
-		// cap population
-		if (population < 0)
-			population = 0;
-			
-		// cap faith, strength, and influence
-		faith = Mathf.Clamp(faith,-population,population);
-		influence = Mathf.Clamp(influence,-population,population);
-		might = Mathf.Clamp(might,-population,population);
-	}
-	
-	function AdjustInfluence(influenceToAdd: int) {
-		Debug.Log("adjusting");
-		// adjust might
-		influence += influenceToAdd;
-		
-		// cap might
-		influence = Mathf.Clamp(influence,0,population);
-	}
-	
-	function AdjustMight(mightToAdd: int) {
-		// adjust might
-		might += mightToAdd;
-		
-		// cap might
-		might = Mathf.Clamp(might,0,population);
-	}
-	
-	function AdjustHappiness(happinessToAdd: int) {
-		// adjust might
-		happiness += happinessToAdd;
-		
-		// cap might
-		happiness = Mathf.Clamp(happinessToAdd,-population,population);
-	}
-	
-	function InfluenceAndBattleAdjacentVillages() {
-		if (faith > 0 && TurnController.myTurn) {
-			for(var currentObject in connectedVillages) {
-				// get adjacent village
-				var currentVillage = currentObject as Village;
-			
-				// spread faith and kill enemies
-				if(happiness > 0 && influence > currentVillage.influence)
-					currentVillage.startTurnFaithChange += 1;
-				if(happiness < 0 && might > currentVillage.might && currentVillage.faith <= 0)
-					currentVillage.startTurnPopulationChange -= 1;
-			}
-		}
-		if (faith < 0 && !TurnController.myTurn) {
-			for(var currentObject in connectedVillages) {
-				// get adjacent village
-				var currentVillage2 = currentObject as Village;
-			
-				// spread faith and kill enemies
-				if(happiness > 0 && influence > currentVillage2.influence)
-					currentVillage2.startTurnFaithChange -= 1;
-				if(happiness < 0 && might > currentVillage2.might && currentVillage2.faith >= 0)
-					currentVillage2.startTurnPopulationChange -= 1;
-			}
-		}
-	}
-	
-	function ChangeFaithAndPopulationForTurnStart() {
-		AdjustFaith(startTurnFaithChange);
-		AdjustPopulation(startTurnPopulationChange);
-		
-		startTurnFaithChange = 0;
-		startTurnPopulationChange = 0;
-	}
-	
-	function DrawVillageConnectionLines() {
-		var lineRenderer: LineRenderer;
-	
-		// create new line renderer or get old one
-		if (GetComponent(LineRenderer) == null)
-			lineRenderer = gameObject.AddComponent(LineRenderer) as LineRenderer;
-		else
-			lineRenderer = gameObject.GetComponent(LineRenderer) as LineRenderer;
-				
-		// set its appearance		
-		lineRenderer.material = lineMaterial;
-		lineRenderer.SetColors(Color.yellow, Color.yellow);
-		lineRenderer.SetWidth(0.1,0.1);
-		lineRenderer.SetVertexCount(10 * connectedVillages.Count);
-		
-		var currentVillageIndex = 0;
-	
-		for(var currentObject in connectedVillages) {
-			// get adjacent village
-			var currentVillage = currentObject as Village;
-			var currentVillageObject = currentVillage.gameObject;
-			
-			var vertexPosition:Vector3 = transform.position*1.1;
-			for(var i = 0 ;  i < 5 ; i++) {
-				lineRenderer.SetPosition(currentVillageIndex*10 + i,vertexPosition);
-				if( i < 5)
-					vertexPosition = Vector3.RotateTowards(vertexPosition,currentVillageObject.transform.position*1.1,0.32,0.7);
-				else
-					vertexPosition = Vector3.RotateTowards(vertexPosition,transform.position*1.1,0.32,0.7);
-			}
-
-			currentVillageIndex++;
-		}
-	}
-	
-	function ConnectToVillagesInRange() {
-		var range = 3;
-		
-		var nearVillages = tile.GetAllVillagesInRange(range);
-		
-		connectedVillages = nearVillages;
-		DrawVillageConnectionLines();
 	}
 	
 	function LevelUp() {
 		// if we are level 0 or 1, we always level up. If level 2, make sure altar count is 0, ie this is still neutral
-		if(progressRemaining <= 0 && level < 2 || (altarCount == 0)) {
+		if(progressRemaining <= 0 && (level < 2 || (altarCount == 0))) {
 			// if faithful in either direction:
 			//	-increase / decrease altar count
 			//	- increase level
@@ -329,15 +171,31 @@ class Village extends SelectableComponent {
 			progressRemaining = 8 + 4*level;
 			
 			if (altarCount == 2) {
-				// todo tell scorekeeper
+				Scorekeeper.GiveScore(1);
 			}
 			else if (altarCount == -2) {
-				// tell scorekeeper
+				Scorekeeper.GiveScore(-1);
+			}
+			
+			// change color based on faith
+			if (altarCount < 0) {
+				renderer.material.color = Color.red;
+				color = Color.red;
+			}
+			else if (altarCount > 0) {
+				renderer.material.color = Color.blue;
+				color = Color.blue;
+			}
+			else {
+				renderer.material.color = Color.gray;
+				color = Color.gray;
 			}
 		}
 	}
 	
 	function ChangeResources() {
+		resourcesNeededString = "";
+	
 		// Create indices for randomness
 		var indexList = ArrayList();
 		for(var i = 0 ; i < 5 ; i++)
@@ -358,6 +216,7 @@ class Village extends SelectableComponent {
 			indexList.RemoveAt(index);
 			
 			resourcesNeeded[resourceIndex] = resourceNames[index];
+			resourcesNeededString += resourceNames[index][0] + " ";
 		}
 	}
 	

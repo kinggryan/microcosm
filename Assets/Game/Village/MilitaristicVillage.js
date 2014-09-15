@@ -17,12 +17,4 @@ class MilitaristicVillage extends Village {
 		type = "MIL";
 		super.Start();
 	}
-	
-	function DevotionAbility(target: Village) {
-		// if target is in range
-		if (faith >= devotedMinimum && tile.LookForTile(target.tile,2,false)) {
-			target.AdjustPopulation(-1);
-			super.DevotionAbility(target);
-		}
-	}
 }

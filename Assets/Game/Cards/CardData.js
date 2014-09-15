@@ -16,14 +16,12 @@ class CardData extends Object {
 	
 	var card: Card = null;
 	var powerCost: int = 0;
+	var range: int = 0;
 	
 	// Methods
 	function UseAbility(target: SelectableComponent) : boolean {}
 	
-	function CreateFollower(target: TileData, followerPrefab: GameObject) {
-		var follower = GameObject.Instantiate(followerPrefab,Vector3.zero,Quaternion.identity);
-		var followerData = follower.GetComponent(Follower);
-		
-		followerData.StartOnTile(target);
+	function IsInRange(target: TileData) : boolean {
+		return TurnController.playerOrigin.LookForTile(target, range, false);
 	}
 }

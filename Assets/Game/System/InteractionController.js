@@ -64,10 +64,6 @@ class InteractionController extends Photon.MonoBehaviour {
 	function GameObjectClicked(clickedObject: GameObject) {
 		if (clickedObject.GetComponent(Village) != null)
 			VillageClicked(clickedObject.GetComponent(Village));
-		else if (clickedObject.GetComponent(Follower) != null)
-			FollowerClicked(clickedObject.GetComponent(Follower));
-		else if (clickedObject.GetComponent(AbilityDialogueButton) != null)
-			AbilityDialogueButtonClicked(clickedObject.GetComponent(AbilityDialogueButton));
 		else if (clickedObject.GetComponent(TileData) != null)
 			TerrainClicked(clickedObject.GetComponent(TileData));
 		else if (clickedObject.GetComponent(Card) != null)
@@ -138,93 +134,8 @@ class InteractionController extends Photon.MonoBehaviour {
 		}
 	}
 	
-	// called on clicked followers
-	function FollowerClicked(follower: Follower) {
-		switch (interactionMode) {
-		case InteractionMode.None:
-			if(!follower.used) {
-				// select new object
-				selectedObject = follower;
-				selectedObject.Select();
-			
-				// set mode to select Follower Ability
-				interactionMode = InteractionMode.SelectingFollowerAbility;
-			}
-			
-			break;
-		
-		case InteractionMode.SelectingFollowerAbility:
-			// if this object is selected, then select
-			if (follower == selectedObject) {
-				selectedObject.Deselect(false);
-				selectedObject = null;
-				interactionMode = InteractionMode.None;
-			}
-		
-		default: break;
-		}
-	}
-	
-	function AbilityDialogueButtonClicked(button: AbilityDialogueButton) {
-		// if this is called, we are, by necessity, in a mode where it's relevant
-		
-		// deselect only if we were selected on another ability. Otherwise, we have the follower selected
-		if (interactionMode != InteractionMode.SelectingFollowerAbility)
-			selectedObject.Deselect(false);
-		
-		if (button == selectedObject) {
-			// if we clicked the already selected button, deselect the ability
-			selectedObject.Deselect(false);
-			interactionMode = InteractionMode.SelectingFollowerAbility;
-			selectedObject = button.follower;
-		}
-		else {
-			// select and set mode
-			interactionMode = button.targettingMode;
-					
-			// select ability if it targets
-			selectedObject = button;
-			selectedObject.Select();
-			
-			if (interactionMode == InteractionMode.None) {
-				// ability does not target, so execute it immediately
-				// find ability button
-				var abilityButton = selectedObject as AbilityDialogueButton;
-			
-				// call ability. If it was a success, deselect; otherwise, deselect just the ability and go back to ability selection mode
-				if (abilityButton.follower.UseAbility(abilityButton.abilityIndex,null)) {
-					interactionMode = InteractionMode.None;
-				
-					// have button call deselect on follower
-					abilityButton.Deselect(true);
-					selectedObject = null;
-				}
-				else {
-					// ability failed ; deselect ability
-					selectedObject = abilityButton.follower;
-					abilityButton.Deselect(false);
-					interactionMode = InteractionMode.SelectingFollowerAbility;
-				}
-			}
-		}
-	}
-	
 	function TerrainClicked(terrain: TileData) {
 		switch (interactionMode) {
-		case InteractionMode.FollowerAbilityTargettingTerrain:
-			// find ability button
-			var abilityButton = selectedObject.gameObject.GetComponent(AbilityDialogueButton);
-			
-			// call ability. If it was a success, deselect; otherwise, don't
-			if (abilityButton.follower.UseAbility(abilityButton.abilityIndex,terrain)) {
-				interactionMode = InteractionMode.None;
-				
-				// have button call deselect on follower
-				abilityButton.Deselect(true);
-				selectedObject = null;
-			}
-			
-			break;
 			
 		case InteractionMode.CardTargettingTerrain:
 			if (!TurnController.myTurn)
