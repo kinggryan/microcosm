@@ -236,6 +236,7 @@ class InteractionController extends Photon.MonoBehaviour {
 			// call ability. If it was a success, deselect; otherwise, don't
 			if (card.UseAbility(terrain)) {
 				interactionMode = InteractionMode.None;
+				photonView.RPC("PlayCardAcrossNetwork",PhotonTargets.Others,card.GetCardDataName(),terrain.photonView.viewID);
 				
 				// if the card is still in hand after being played, deselect it
 				if(card != null)

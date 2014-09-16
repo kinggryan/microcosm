@@ -14,6 +14,7 @@ class GameTerrain {
 	var color:Color = Color.white;	//	Todo change to a texture, rather than color
 	var unwalkable: boolean = false;
 	var tile: TileData = null;
+	var powerCost: int = 0;
 	
 	// Methods
 	
