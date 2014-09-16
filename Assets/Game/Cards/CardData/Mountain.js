@@ -2,23 +2,23 @@
 
 /*****
 
-	Hills
+	Mountain
 	
 	Power Cost:		1
-	Range:			2
-	Resources:		4C
+	Range:			1
+	Resources:		5M
 	
 	*****/
 	
-class Hills extends CardData {
+class Mountain extends CardData {
 	// Methods
 	
-	function Hills() {
-		cardName = "Hills";
-		text = "Terrain\nPowerCost:1\nRange:2\nResources:4C";
+	function Mountain() {
+		cardName = "Mountain";
+		text = "Terrain\nPowerCost:1\nRange:1\nResources:5M";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 1;
 		powerCost = 1;
 	}
 	
@@ -30,9 +30,9 @@ class Hills extends CardData {
 			// change tile terrain to forest
 			targetTile.terrain = new GameTerrain();
 			targetTile.terrain.tile = targetTile;
-			targetTile.terrain.color = Color(1,0.8,0);
+			targetTile.terrain.color = Color.gray;
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.clay = 4;
+			targetTile.terrain.metal = 5;
 			targetTile.terrain.powerCost = 1;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

@@ -2,24 +2,25 @@
 
 /*****
 
-	Hills
+	Glittery River
 	
-	Power Cost:		1
-	Range:			2
-	Resources:		4C
+	Power Cost:		2
+	Range:			1
+	Resources:		4C, 1J
+	Jewels on this tile are Wondrous (worth x2 faith)
 	
 	*****/
 	
-class Hills extends CardData {
+class GlitteryRiver extends CardData {
 	// Methods
 	
-	function Hills() {
-		cardName = "Hills";
-		text = "Terrain\nPowerCost:1\nRange:2\nResources:4C";
+	function GlitteryRiver() {
+		cardName = "Glittery River";
+		text = "Terrain\nPowerCost:2\nRange:1\nResources:4C, 1J\nJewels on this tile are Wondrous - worth x2 faith";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
-		powerCost = 1;
+		range = 1;
+		powerCost = 2;
 	}
 	
 	function UseAbility(target: SelectableComponent) : boolean {
@@ -28,12 +29,13 @@ class Hills extends CardData {
 		
 		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost + targetTile.terrain.powerCost) && IsInRange(targetTile) && !targetTile.terrain.unwalkable) ) {
 			// change tile terrain to forest
-			targetTile.terrain = new GameTerrain();
+			targetTile.terrain = new WondrousJewelTerrain();
 			targetTile.terrain.tile = targetTile;
-			targetTile.terrain.color = Color(1,0.8,0);
+			targetTile.terrain.color = Color(0.95,0.8,0.8);
 			targetTile.terrain.isMine = TurnController.myTurn;
+			targetTile.terrain.jewels = 1;
 			targetTile.terrain.clay = 4;
-			targetTile.terrain.powerCost = 1;
+			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			
 			// send card played messages

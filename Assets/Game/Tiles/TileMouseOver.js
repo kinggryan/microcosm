@@ -7,7 +7,7 @@ var savedColor = Color.white;
 function OnMouseEnter() {
 	var lineRenderer = GetComponent(LineRenderer);
 
-	lineRenderer.SetColors(Color.blue, Color.blue);
+	lineRenderer.SetColors(Color.yellow, Color.yellow);
 	lineRenderer.SetWidth(0.3,0.3);
 	
 	savedColor = renderer.material.color;
@@ -25,8 +25,8 @@ function OnMouseExit() {
 	var lineRenderer = GetComponent(LineRenderer);
 	var tileData = GetComponent(TileData);
 	
-	lineRenderer.SetColors(Color.gray, Color.gray);
-	lineRenderer.SetWidth(0.1,0.1);
+	lineRenderer.SetColors(tileData.lineColor, tileData.lineColor);
+	lineRenderer.SetWidth(tileData.lineWidth,tileData.lineWidth);
 	
 	renderer.material.color = tileData.terrain.color;
 	

@@ -29,7 +29,7 @@ class ResourceController extends MonoBehaviour {
 	
 	// draw power
 	function OnGUI() {
-		var powerLabelPosition = Rect(80,28,80,70);
+		var powerLabelPosition = Rect(170,15,80,70);
 		
 		GUI.Label(powerLabelPosition,"Power : "+availablePower +"/"+currentPowerLevel);
 	}

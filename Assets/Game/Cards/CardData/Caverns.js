@@ -2,24 +2,25 @@
 
 /*****
 
-	Hills
+	Caverns
 	
-	Power Cost:		1
+	Power Cost:		2
 	Range:			2
-	Resources:		4C
+	Resources:		2J
+	Wondrous (worth x2 faith)
 	
 	*****/
 	
-class Hills extends CardData {
+class Caverns extends CardData {
 	// Methods
 	
-	function Hills() {
-		cardName = "Hills";
-		text = "Terrain\nPowerCost:1\nRange:2\nResources:4C";
+	function Caverns() {
+		cardName = "Caverns";
+		text = "Terrain\nPowerCost:2\nRange:2\nResources:2J\nWondrous - worth x2 faith";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
 		range = 2;
-		powerCost = 1;
+		powerCost = 2;
 	}
 	
 	function UseAbility(target: SelectableComponent) : boolean {
@@ -28,12 +29,12 @@ class Hills extends CardData {
 		
 		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost + targetTile.terrain.powerCost) && IsInRange(targetTile) && !targetTile.terrain.unwalkable) ) {
 			// change tile terrain to forest
-			targetTile.terrain = new GameTerrain();
+			targetTile.terrain = new WondrousJewelTerrain();
 			targetTile.terrain.tile = targetTile;
-			targetTile.terrain.color = Color(1,0.8,0);
+			targetTile.terrain.color = Color(0.95,0.95,1);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.clay = 4;
-			targetTile.terrain.powerCost = 1;
+			targetTile.terrain.jewels = 2;
+			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			
 			// send card played messages

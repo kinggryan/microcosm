@@ -18,6 +18,8 @@ class TileData extends SelectableComponent {
 	public var village: Village;
 	public var followers: ArrayList;
 	public var showText: boolean = false;
+	public var lineColor = Color.gray;
+	public var lineWidth = 0.1;
 
 	// Static Properties
 	public static var followerRowOffset = Vector3.right*0.5;
@@ -176,6 +178,15 @@ class TileData extends SelectableComponent {
 	
 	function OnMouseExit() {
 		showText = false;
+	}
+	
+	function SetLineColor(color: Color) {
+		lineColor = color;
+		lineWidth = 0.15;
+		
+		var lineRenderer = GetComponent(LineRenderer) as LineRenderer;
+		lineRenderer.SetColors(lineColor,lineColor);
+		lineRenderer.SetWidth(lineWidth,lineWidth);
 	}
 	
 	function OnGUI() {

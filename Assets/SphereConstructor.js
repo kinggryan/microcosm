@@ -276,7 +276,9 @@ function ConnectAllEdgesOfVertex(vertex: int) {
 
 function PlaceVillageOnTile(tile: TileData, village: GameObject) {
 	// move village and rotate it
-	village.transform.position = tile.tileCenter * 1.1;
+	var cross = Vector3.Cross(Vector3.up,tile.tileCenter).normalized;
+	
+	village.transform.position = (tile.tileCenter * 1.1) + (cross*0.3);
 	village.transform.up = tile.tileCenter / tile.tileCenter.magnitude;
 	
 	// point at each other

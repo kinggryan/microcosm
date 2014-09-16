@@ -2,38 +2,39 @@
 
 /*****
 
-	Hills
+	Uprisen Delta 
 	
-	Power Cost:		1
+	Power Cost:		2
 	Range:			2
 	Resources:		4C
+	This tile can be created on ocean
 	
 	*****/
 	
-class Hills extends CardData {
+class UprisenDelta extends CardData {
 	// Methods
 	
-	function Hills() {
-		cardName = "Hills";
-		text = "Terrain\nPowerCost:1\nRange:2\nResources:4C";
+	function UprisenDelta() {
+		cardName = "Uprisen Delta";
+		text = "Terrain\nPowerCost:2\nRange:2\nResources:4C\nCan be created on ocean.";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
 		range = 2;
-		powerCost = 1;
+		powerCost = 2;
 	}
 	
 	function UseAbility(target: SelectableComponent) : boolean {
 		// make sure you can target the village
 		var targetTile = target as TileData;
 		
-		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost + targetTile.terrain.powerCost) && IsInRange(targetTile) && !targetTile.terrain.unwalkable) ) {
-			// change tile terrain to forest
+		if(!TurnController.myTurn || (ResourceController.UsePower(powerCost + targetTile.terrain.powerCost) && IsInRange(targetTile))) {
+			// change tile terrain
 			targetTile.terrain = new GameTerrain();
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(1,0.8,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
 			targetTile.terrain.clay = 4;
-			targetTile.terrain.powerCost = 1;
+			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			
 			// send card played messages
