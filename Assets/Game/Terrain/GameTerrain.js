@@ -58,6 +58,11 @@ class GameTerrain {
 			if(adjacentTile.village != null)
 				GiveResourcesToVillage(adjacentTile.village);
 		}
+		
+		// if we're out of resources, consider this tile spent.
+		if (clay == 0 && jewels == 0 && wood == 0 && grain == 0 && metal == 0) {
+			Spent();
+		}
 	}
 	
 	function GiveResourcesToVillage(village: Village) {
@@ -99,5 +104,13 @@ class GameTerrain {
 				village.AdjustFaith(faithSign*1);
 			}
 		}
+	}
+	
+	function Spent() {
+		isMine = false;
+		tile.SetLineColor(Color.gray);
+		powerCost = 0;
+		helpText = "";
+		color = Color(1,1,0.8);
 	}
 }

@@ -210,8 +210,8 @@ class Village extends SelectableComponent {
 		
 		// generate needed resources
 		for(var resourceIndex = 0; resourceIndex < numberOfNeededResources; resourceIndex++) {
-			var index = Random.Range(0,indexList.Count);
-			indexList.RemoveAt(index);
+			var index = indexList[Random.Range(0,indexList.Count)];
+			indexList.Remove(index);
 			
 			resourcesNeeded[resourceIndex] = resourceNames[index];
 			resourcesNeededString += resourceNames[index][0] + " ";

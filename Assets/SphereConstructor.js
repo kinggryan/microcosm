@@ -75,63 +75,69 @@ function BuildSphere() {
 		if (index < 3 || index == 4)
 			if (index == 1) {
 				var newTile1 = DrawTile(keyPoints,0,index,new TerrainForest());
-				aggTiles.Add(newTile1);
 				
 				if(PhotonNetwork.isMasterClient)
 					TurnController.playerOrigin = newTile1;
 			}
 			else if (index == 4) {
 				var newTile2 = DrawTile(keyPoints,0,index,new TerrainForest());
-				milTiles.Add(newTile2);
 				
 				if(!PhotonNetwork.isMasterClient)
 					TurnController.playerOrigin = newTile2;
 			}
 			else 
 				DrawTile(keyPoints,0,index,new TerrainOcean());
+		else if(index == 5)
+			milTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
 		else
 			DrawTile(keyPoints,0,index,new TerrainOcean());
 			
-		if (index == 3) 
+		if (index == 3 || index == 1) 
 			DrawTile(keyPoints,index,index+1,new TerrainOcean());
-		else if(index < 5)
+		else if(index < 4)
+			milTiles.Add(DrawTile(keyPoints,index,index+1,new TerrainForest()));
+		else if (index == 4)
 			DrawTile(keyPoints,index,index+1,new TerrainForest());
 		else // index == 5
-			DrawTile(keyPoints,index,1,new TerrainOcean());
+			DrawTile(keyPoints,index,1,new TerrainForest());
 	}
 	
 	// draw tiles for bottom half
 	for (index = 7; index <= 11; index++) {
 		if (index < 9 || index == 10)
 			if (index == 7)
-				aggTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				DrawTile(keyPoints,6,index,new TerrainOcean());
 			else if (index == 10)
-				milTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+				DrawTile(keyPoints,6,index,new TerrainOcean());
 			else
 				DrawTile(keyPoints,6,index,new TerrainOcean());
+		else if (index == 11)
+			milTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
 		else
 			DrawTile(keyPoints,6,index,new TerrainOcean());
-		
+			
 		if (index == 9)
 			DrawTile(keyPoints,index,index+1,new TerrainOcean());
-		else if(index < 11)
+		else if(index < 10)
+			DrawTile(keyPoints,index,index+1,new TerrainOcean());
+		else if (index == 10) 
 			DrawTile(keyPoints,index,index+1,new TerrainForest());
 		else
-			DrawTile(keyPoints,index,7,new TerrainOcean());
+			DrawTile(keyPoints,index,7,new TerrainForest());
 	}
 	
 	// Draw middle tiles
-	aggTiles.Add(DrawTile(keyPoints,1,10,new TerrainForest()));
+	DrawTile(keyPoints,1,10,new TerrainOcean());
 	DrawTile(keyPoints,2,11,new TerrainForest());
-	DrawTile(keyPoints,3,7,new TerrainOcean());
-	DrawTile(keyPoints,4,8,new TerrainForest());
+	milTiles.Add(DrawTile(keyPoints,3,7,new TerrainForest()));
+	DrawTile(keyPoints,4,8,new TerrainOcean());
 	milTiles.Add(DrawTile(keyPoints,5,9,new TerrainForest()));
 	
 	DrawTile(keyPoints,1,9,new TerrainOcean());
-	DrawTile(keyPoints,2,10,new TerrainForest());
-	milTiles.Add(DrawTile(keyPoints,3,11,new TerrainForest()));
-	aggTiles.Add(DrawTile(keyPoints,4,7,new TerrainForest()));
-	DrawTile(keyPoints,5,8,new TerrainForest());
+	milTiles.Add(DrawTile(keyPoints,2,10,new TerrainForest()));
+	DrawTile(keyPoints,3,11,new TerrainForest());
+	DrawTile(keyPoints,4,7,new TerrainOcean());
+	aggTiles.Add(DrawTile(keyPoints,5,8,new TerrainForest()));
 	
 	
 	// Add Villages

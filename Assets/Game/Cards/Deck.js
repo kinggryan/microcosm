@@ -25,20 +25,84 @@ class Deck extends MonoBehaviour {
 			card = null;
 			
 		deck = new CardData[30];
-		
-		for(deckCard in deck)
-			deckCard = new CardData();
 			
-		deck[0] = new ForestCard();
-		deck[1] = new ForestCard();
-		deck[2] = new ForestCard();
-		
-		// todo make deck consist of test cards
-		
-		DrawCard();
-		DrawCard();
-		DrawCard();
+		SetStarterDeck();
+		DrawStartingHand();
 	}
+	
+	function SetStarterDeck() {
+		// Construct Shuffle Indices
+		var remainingCardIndices = ArrayList();
+		for(var index = 0 ; index < 30 ; index++)
+			remainingCardIndices.Add(index);
+	
+		// Construct rest of deck randomly
+		// Deck list (29 cards) :
+		// 		Basic Colony 			x2
+		//		Housing Dome 			x2
+		// 		Exploration Base 		x2
+		//		Basic Farm				x5
+		//		Research Facility 		x2
+		//		Tech Windfall			x2
+		//		Production Plant		x2
+		//		Distractitorium			x2
+		//		Utopia Dome				x2
+		//		Space Plantation		x2
+		//		Food Processing Plant	x2
+		//		Engineering Institute	x2
+		//		Viewing Platform		x2
+		
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = ForestCard();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = ForestCard();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Hills();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Hills();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Field();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Field();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Caverns();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Caverns();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = ColossalWaterfall();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = ColossalWaterfall();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = UprisenDelta();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = UprisenDelta();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Faultline();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Faultline();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Savannah();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = Savannah();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = GlitteryRiver();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = GlitteryRiver();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = AshbornGrove();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = AshbornGrove();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = DeepMines();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = DeepMines();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = GreatPlains();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = GreatPlains();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = SpoiledJewels();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = SpoiledJewels();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = PleasantWood();
+		deck[RandomIndexFromIndexList(remainingCardIndices)] = PleasantWood();
+		
+		// END DECKLIST
+	}
+	
+	function DrawStartingHand() {
+		var startingHandSize = 4;
+		
+		for(var cardCount = 0 ; cardCount<startingHandSize ; cardCount++) {
+			DrawCard();
+		}
+		hand[4] = null;
+		hand[5] = null;
+	}
+	
+	function RandomIndexFromIndexList(list: ArrayList) : int {
+		var randomNum = Random.Range(0,list.Count);
+		var returnValue = list[randomNum];
+		list.RemoveAt(randomNum);
+		return returnValue;
+	}
+	
 	
 	function DrawCard() {
 		if(numberOfCardsInHand < 6) {
