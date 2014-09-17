@@ -260,6 +260,14 @@ class TileData extends SelectableComponent {
 				GUI.Label(frame,"J: " + terrain.jewels.ToString(),displayStyle);
 			}
 			
+			if(terrain.powerCost > 0) {
+				worldCoords = tileCenter;
+				screenCoords = Camera.main.WorldToScreenPoint(worldCoords);
+		
+				frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y,40,25);
+				GUI.Label(frame,"cost: " + terrain.powerCost.ToString(),displayStyle);
+			}
+			
 //displayStyle.font.material.color = Color.black;
 		}
 	}

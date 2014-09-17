@@ -13,4 +13,6 @@ class TerrainOcean extends GameTerrain {
 		
 		super();
 	}
+	
+	function Spent() { }	// do nothing
 }

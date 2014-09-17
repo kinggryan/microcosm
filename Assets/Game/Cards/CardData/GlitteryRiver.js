@@ -5,8 +5,8 @@
 	Glittery River
 	
 	Power Cost:		2
-	Range:			1
-	Resources:		4C, 1J
+	Range:			2
+	Resources:		8C, 2J
 	Jewels on this tile are Wondrous (worth x2 faith)
 	
 	*****/
@@ -16,10 +16,10 @@ class GlitteryRiver extends CardData {
 	
 	function GlitteryRiver() {
 		cardName = "Glittery River";
-		text = "Terrain\nPowerCost:2\nRange:1\nResources:4C, 1J\nJewels on this tile are Wondrous - worth x2 faith";
+		text = "Terrain\nPowerCost:2\nRange:2\nResources:8C, 2J\nJewels on this tile are Wondrous - worth x2 faith";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 1;
+		range = 2;
 		powerCost = 2;
 	}
 	
@@ -33,8 +33,8 @@ class GlitteryRiver extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0.95,0.8,0.8);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.jewels = 1;
-			targetTile.terrain.clay = 4;
+			targetTile.terrain.jewels = 2;
+			targetTile.terrain.clay = 8;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

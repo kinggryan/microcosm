@@ -5,8 +5,8 @@
 	Pleasant Wood
 	
 	Power Cost:		3
-	Range:			2
-	Resources:		3W
+	Range:			3
+	Resources:		6W
 	Creation: Gain 2 faith in adjacent villages.
 	
 	*****/
@@ -16,10 +16,10 @@ class PleasantWood extends CardData {
 	
 	function PleasantWood() {
 		cardName = "Pleasant Wood";
-		text = "Terrain\nPowerCost:3\nRange:2\nResources:3W\nCreation:Gain 2 faith in adjacent villages.";
+		text = "Terrain\nPowerCost:3\nRange:3\nResources:6W\nCreation:Gain 2 faith in adjacent villages.";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 3;
 	}
 	
@@ -33,7 +33,7 @@ class PleasantWood extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0,0.7,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.wood = 3;
+			targetTile.terrain.wood = 6;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

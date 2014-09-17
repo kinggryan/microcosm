@@ -5,8 +5,8 @@
 	Caverns
 	
 	Power Cost:		2
-	Range:			2
-	Resources:		2J
+	Range:			3
+	Resources:		4J
 	Wondrous (worth x2 faith)
 	
 	*****/
@@ -16,10 +16,10 @@ class Caverns extends CardData {
 	
 	function Caverns() {
 		cardName = "Caverns";
-		text = "Terrain\nPowerCost:2\nRange:2\nResources:2J\nWondrous - worth x2 faith";
+		text = "Terrain\nPowerCost:2\nRange:3\nResources:4J\nWondrous - worth x2 faith";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 2;
 	}
 	
@@ -33,7 +33,7 @@ class Caverns extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0.95,0.95,1);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.jewels = 2;
+			targetTile.terrain.jewels = 4;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

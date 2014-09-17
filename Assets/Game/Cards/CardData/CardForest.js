@@ -5,8 +5,8 @@
 	Forest
 	
 	Power Cost:		1
-	Range:			3
-	Resources:		3W
+	Range:			4
+	Resources:		6W
 	
 	*****/
 	
@@ -15,10 +15,10 @@ class ForestCard extends CardData {
 	
 	function ForestCard() {
 		cardName = "Forest";
-		text = "Terrain\nPowerCost:1\nRange:3\nResources:3W";
+		text = "Terrain\nPowerCost:1\nRange:4\nResources:6W";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 3;
+		range = 4;
 		powerCost = 1;
 	}
 	
@@ -32,7 +32,7 @@ class ForestCard extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color.green;
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.wood = 3;
+			targetTile.terrain.wood = 6;
 			targetTile.terrain.powerCost = 1;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

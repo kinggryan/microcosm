@@ -5,8 +5,8 @@
 	Mountain
 	
 	Power Cost:		1
-	Range:			1
-	Resources:		5M
+	Range:			2
+	Resources:		10M
 	
 	*****/
 	
@@ -15,10 +15,10 @@ class Mountain extends CardData {
 	
 	function Mountain() {
 		cardName = "Mountain";
-		text = "Terrain\nPowerCost:1\nRange:1\nResources:5M";
+		text = "Terrain\nPowerCost:1\nRange:2\nResources:10M";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 1;
+		range = 2;
 		powerCost = 1;
 	}
 	
@@ -32,7 +32,7 @@ class Mountain extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color.gray;
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.metal = 5;
+			targetTile.terrain.metal = 10;
 			targetTile.terrain.powerCost = 1;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

@@ -128,15 +128,15 @@ class Deck extends MonoBehaviour {
 	
 		for (card in hand) {
 			if (card != null)	
-				card.transform.localPosition = Vector3(2.3,0.9-cardVerticalOffset,3);
-				cardVerticalOffset += 0.55;
+				card.transform.position = card.transform.parent.TransformPoint(Vector3(2.3,1.4-cardVerticalOffset,3));
+				cardVerticalOffset += 0.58;
 		}
 	}
 	
 	function RemoveCardFromHand(card: Card) {
 		var cardFound = false;
 	
-		for (var i = 0 ; i < 5 ; i++) {
+		for (var i = 0 ; i < 6 ; i++) {
 			if (cardFound) {
 				// move cards down
 				hand[i-1] = hand[i];

@@ -5,9 +5,9 @@
 	ColossalWaterfall
 	
 	Power Cost:		2
-	Range:			2
-	Resources:		2M
-	Creation: Add two stock to adjacent wood and grain you control
+	Range:			3
+	Resources:		4M
+	Creation: Add 4 stock to adjacent wood and grain you control
 	
 	*****/
 	
@@ -16,10 +16,10 @@ class ColossalWaterfall extends CardData {
 	
 	function ColossalWaterfall() {
 		cardName = "Colossal Waterfal";
-		text = "Terrain\nPowerCost:2\nRange:2\nResources:2M\nCreation:Add 2 stock to adjacent wood and grain you control";
+		text = "Terrain\nPowerCost:2\nRange:3\nResources:4M\nCreation:Add 4 stock to adjacent wood and grain you control";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 2;
 	}
 	
@@ -33,7 +33,7 @@ class ColossalWaterfall extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0,0.7,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.metal = 2;
+			targetTile.terrain.metal = 4;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			
@@ -41,9 +41,9 @@ class ColossalWaterfall extends CardData {
 			for(var adjacentTile in targetTile.adjacentTiles) {
 				if(adjacentTile.terrain.isMine == true) {
 					if(adjacentTile.terrain.wood > 0)
-						adjacentTile.terrain.wood += 2;
+						adjacentTile.terrain.wood += 4;
 					if(adjacentTile.terrain.grain > 0)
-						adjacentTile.terrain.grain += 2;
+						adjacentTile.terrain.grain += 4;
 				}
 			}
 			

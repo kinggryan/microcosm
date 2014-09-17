@@ -5,8 +5,8 @@
 	Field
 	
 	Power Cost:		1
-	Range:			4
-	Resources:		2G
+	Range:			5
+	Resources:		4G
 	
 	*****/
 	
@@ -15,10 +15,10 @@ class Field extends CardData {
 	
 	function Field() {
 		cardName = "Field";
-		text = "Terrain\nPowerCost:1\nRange:4\nResources:2G";
+		text = "Terrain\nPowerCost:1\nRange:5\nResources:4G";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 4;
+		range = 5;
 		powerCost = 1;
 	}
 	
@@ -32,7 +32,7 @@ class Field extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(1,0.8,0.7);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.grain = 2;
+			targetTile.terrain.grain = 4;
 			targetTile.terrain.powerCost = 1;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

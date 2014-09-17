@@ -5,8 +5,8 @@
 	Uprisen Delta 
 	
 	Power Cost:		2
-	Range:			2
-	Resources:		4C
+	Range:			3
+	Resources:		8C
 	This tile can be created on ocean
 	
 	*****/
@@ -16,10 +16,10 @@ class UprisenDelta extends CardData {
 	
 	function UprisenDelta() {
 		cardName = "Uprisen Delta";
-		text = "Terrain\nPowerCost:2\nRange:2\nResources:4C\nCan be created on ocean.";
+		text = "Terrain\nPowerCost:2\nRange:3\nResources:8C\nCan be created on ocean.";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 2;
 	}
 	
@@ -33,7 +33,7 @@ class UprisenDelta extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(1,0.8,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.clay = 4;
+			targetTile.terrain.clay = 8;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

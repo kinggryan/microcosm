@@ -5,8 +5,8 @@
 	Faultline 
 	
 	Power Cost:		2
-	Range:			1
-	Resources:		3C
+	Range:			2
+	Resources:		6C
 	Creation: Add 3 to the needed progress of all adjacent villages.
 	
 	*****/
@@ -16,10 +16,10 @@ class Faultline extends CardData {
 	
 	function Faultline() {
 		cardName = "Savannah";
-		text = "Terrain\nPowerCost:2\nRange:1\nResources:3C\nCreation: Add 3 to the needed progress of all adjacent villages.";
+		text = "Terrain\nPowerCost:2\nRange:2\nResources:6C\nCreation: Add 3 to the needed progress of all adjacent villages.";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 1;
+		range = 2;
 		powerCost = 2;
 	}
 	
@@ -33,7 +33,7 @@ class Faultline extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(1,0.8,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.clay = 3;
+			targetTile.terrain.clay = 6;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

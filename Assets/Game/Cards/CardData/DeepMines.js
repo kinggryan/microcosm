@@ -5,8 +5,8 @@
 	Deep Mines
 	
 	Power Cost:		3
-	Range:			1
-	Resources:		8M
+	Range:			2
+	Resources:		16M
 
 	
 	*****/
@@ -16,10 +16,10 @@ class DeepMines extends CardData {
 	
 	function DeepMines() {
 		cardName = "DeepMines";
-		text = "Terrain\nPowerCost:3\nRange:1\nResources:8M";
+		text = "Terrain\nPowerCost:3\nRange:2\nResources:16M";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 1;
+		range = 2;
 		powerCost = 3;
 	}
 	
@@ -33,7 +33,7 @@ class DeepMines extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color =  Color.gray;
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.metal = 8;
+			targetTile.terrain.metal = 16;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

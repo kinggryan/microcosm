@@ -5,8 +5,8 @@
 	Hills
 	
 	Power Cost:		1
-	Range:			2
-	Resources:		4C
+	Range:			3
+	Resources:		8C
 	
 	*****/
 	
@@ -15,10 +15,10 @@ class Hills extends CardData {
 	
 	function Hills() {
 		cardName = "Hills";
-		text = "Terrain\nPowerCost:1\nRange:2\nResources:4C";
+		text = "Terrain\nPowerCost:1\nRange:3\nResources:8C";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 1;
 	}
 	
@@ -32,7 +32,7 @@ class Hills extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(1,0.8,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.clay = 4;
+			targetTile.terrain.clay = 8;
 			targetTile.terrain.powerCost = 1;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			

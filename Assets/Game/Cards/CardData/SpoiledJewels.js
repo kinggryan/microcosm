@@ -5,8 +5,8 @@
 	Spoiled Jewels
 	
 	Power Cost:		3
-	Range:			1
-	Resources:		3J
+	Range:			2
+	Resources:		6J
 	Wondrous (worth x2 faith)
 	Spent: Lose 5 faith in adjacent villages
 	
@@ -17,10 +17,10 @@ class SpoiledJewels extends CardData {
 	
 	function SpoiledJewels() {
 		cardName = "Spoiled Jewels";
-		text = "Terrain\nPowerCost:3\nRange:1\nResources:3J\nWondrous - worth x2 faith.Spent: Lose 5 faith in adjacent villages.";
+		text = "Terrain\nPowerCost:3\nRange:2\nResources:6J\nWondrous - worth x2 faith.Spent: Lose 5 faith in adjacent villages.";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 1;
+		range = 2;
 		powerCost = 3;
 	}
 	
@@ -34,7 +34,7 @@ class SpoiledJewels extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0.95,0.7,0.7);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.jewels = 3;
+			targetTile.terrain.jewels = 6;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			targetTile.terrain.helpText = "Spent: Lose 5 faith in adjacent villages";

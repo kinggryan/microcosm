@@ -5,9 +5,9 @@
 	Savannah 
 	
 	Power Cost:		2
-	Range:			2
-	Resources:		2G
-	Creation: Steal 1 wood stock from each adjacent tile, if possible.
+	Range:			3
+	Resources:		4G
+	Creation: Steal 2 wood stock from each adjacent tile, if possible.
 	
 	*****/
 	
@@ -16,10 +16,10 @@ class Savannah extends CardData {
 	
 	function Savannah() {
 		cardName = "Savannah";
-		text = "Terrain\nPowerCost:2\nRange:2\nResources:2G\nCreation:Steal 1 wood stock from each adjacent tile, if possible";
+		text = "Terrain\nPowerCost:2\nRange:3\nResources:4G\nCreation:Steal 2 wood stock from each adjacent tile, if possible";
 		targettingMode = InteractionMode.CardTargettingTerrain;
 		
-		range = 2;
+		range = 3;
 		powerCost = 2;
 	}
 	
@@ -33,15 +33,15 @@ class Savannah extends CardData {
 			targetTile.terrain.tile = targetTile;
 			targetTile.terrain.color = Color(0,0.7,0);
 			targetTile.terrain.isMine = TurnController.myTurn;
-			targetTile.terrain.grain = 2;
+			targetTile.terrain.grain = 4;
 			targetTile.terrain.powerCost = powerCost;
 			targetTile.terrain.SetGraphics(targetTile.renderer);
 			
 			// do card creation effect
 			for(var adjacentTile in targetTile.adjacentTiles) {
 				if(adjacentTile.terrain.wood > 0) {
-					adjacentTile.terrain.wood--;
-					targetTile.terrain.wood++;
+					adjacentTile.terrain.wood-=2;
+					targetTile.terrain.wood+=2;
 				}
 			}
 			
