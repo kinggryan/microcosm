@@ -11,7 +11,7 @@ class GameTerrain {
 	
 	var name: String = "";
 	var isMine: boolean = false;
-	var color:Color = Color.white;	//	Todo change to a texture, rather than color
+	var color:Color = Color(1,1,0.8);	//	Todo change to a texture, rather than color
 	var unwalkable: boolean = false;
 	var tile: TileData = null;
 	var helpText: String = "";
@@ -33,7 +33,16 @@ class GameTerrain {
 			isMine = false;
 	}
 	
-	function Initialize() { }
+	function Initialize() { 
+		if(name != "" && name != "Ocean") {
+			for(var adjacentTile in tile.adjacentTiles) {
+				if(adjacentTile.terrain.name == "River") {
+					var river = adjacentTile.terrain as River;
+					river.AddTileToRiver(tile);
+				}
+			} 
+		}
+	}
 	
 	// Creation method called when this terrain is created
 	function Creation() {
@@ -48,7 +57,7 @@ class GameTerrain {
 		renderer.material.color = color;
 	}
 	
-	function GiveResourcesToAdjacentVillages() {
+/*	function GiveResourcesToAdjacentVillages() {
 		// do village on this tile
 		if(tile.village != null)
 			GiveResourcesToVillage(tile.village);
@@ -63,7 +72,7 @@ class GameTerrain {
 		if (clay == 0 && jewels == 0 && wood == 0 && grain == 0 && metal == 0) {
 			Spent();
 		}
-	}
+	} */
 	
 	function GiveResourcesToVillage(village: Village) {
 		// exit this if it isn't this tile's controller's turn

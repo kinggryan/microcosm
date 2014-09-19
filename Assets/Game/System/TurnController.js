@@ -75,7 +75,11 @@ class TurnController extends Photon.MonoBehaviour {
 		// execute end of turn effects and give resources
 		for(var tile in GameObject.FindObjectsOfType(TileData)) {
 			tile.terrain.EndTurn();
-			tile.terrain.GiveResourcesToAdjacentVillages();
+		}
+		
+		// give resources to villages
+		for(var village in GameObject.FindObjectsOfType(Village)) {
+			village.Harvest();
 		}
 		
 		// level up villages
@@ -107,6 +111,10 @@ class TurnController extends Photon.MonoBehaviour {
 			
 			// add and refresh power
 			ResourceController.StartTurn();	
+			
+			// allow terraformer to terraform
+			var terraformer = GameObject.FindObjectOfType(Terraformer) as Terraformer;
+			terraformer.hasTerraformed = false;
 		}
 	}
 	
@@ -118,5 +126,9 @@ class TurnController extends Photon.MonoBehaviour {
 	function GoFirst() {
 		myTurn = true;
 		ResourceController.StartTurn();
+		
+		// allow terraformer to terraform
+		var terraformer = GameObject.FindObjectOfType(Terraformer) as Terraformer;
+		terraformer.hasTerraformed = false;
 	}
 }

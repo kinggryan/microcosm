@@ -25,6 +25,8 @@ static class InteractionMode {
 	
 	public var CardTargettingVillage = 4;
 	public var CardTargettingTerrain = 5;
+	
+	public var Terraforming = 6;
 }
 			
 // Interaction Controller class
@@ -49,7 +51,8 @@ class InteractionController extends Photon.MonoBehaviour {
 				var clickedObject = hit.collider.gameObject;
 				GameObjectClicked(clickedObject);
 			}
-			else {
+			else if (interactionMode != InteractionMode.Terraforming) {	//	for testing just ignore this when terraforming
+				Debug.Log("Deselecting");
 				interactionMode = InteractionMode.None;	// deselct if user clicked nothing
 				
 				if(selectedObject != null) {
@@ -163,6 +166,19 @@ class InteractionController extends Photon.MonoBehaviour {
 			
 			break;
 			
+		case InteractionMode.Terraforming:
+			// cast as terraformer
+			var terraformer = selectedObject as Terraformer;
+			
+			// call ability
+			if (terraformer.TerraformTile(terrain)) {
+				interactionMode = InteractionMode.None;
+				
+				// deselect
+				terraformer.Deselect(false);
+				selectedObject = null;
+			}
+			
 		default: break;
 		}
 	}
@@ -202,5 +218,15 @@ class InteractionController extends Photon.MonoBehaviour {
 		
 		// Use card's effect on target
 		cardBeingPlayed.UseAbility(targetObject);
+	}
+	
+	function TerraformerClicked(terraformer: Terraformer) {
+		if(selectedObject != null)
+			selectedObject.Deselect(true);
+			
+		selectedObject = terraformer;
+		interactionMode = InteractionMode.Terraforming;
+		
+		Debug.Log("Terraformer Clicked");
 	}
 }

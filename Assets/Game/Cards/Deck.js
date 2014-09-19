@@ -56,8 +56,8 @@ class Deck extends MonoBehaviour {
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = ForestCard();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = Hills();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = Hills();
-		deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
-		deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
+	//	deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
+	//	deck[RandomIndexFromIndexList(remainingCardIndices)] = Mountain();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = Field();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = Field();
 		deck[RandomIndexFromIndexList(remainingCardIndices)] = Caverns();

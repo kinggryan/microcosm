@@ -74,13 +74,13 @@ function BuildSphere() {
 	for (var index = 1; index <= 5; index++) {
 		if (index < 3 || index == 4)
 			if (index == 1) {
-				var newTile1 = DrawTile(keyPoints,0,index,new TerrainForest());
+				var newTile1 = DrawTile(keyPoints,0,index,new GameTerrain());
 				
 				if(PhotonNetwork.isMasterClient)
 					TurnController.playerOrigin = newTile1;
 			}
 			else if (index == 4) {
-				var newTile2 = DrawTile(keyPoints,0,index,new TerrainForest());
+				var newTile2 = DrawTile(keyPoints,0,index,new GameTerrain());
 				
 				if(!PhotonNetwork.isMasterClient)
 					TurnController.playerOrigin = newTile2;
@@ -88,18 +88,18 @@ function BuildSphere() {
 			else 
 				DrawTile(keyPoints,0,index,new TerrainOcean());
 		else if(index == 5)
-			milTiles.Add(DrawTile(keyPoints,0,index,new TerrainForest()));
+			milTiles.Add(DrawTile(keyPoints,0,index,new GameTerrain()));
 		else
 			DrawTile(keyPoints,0,index,new TerrainOcean());
 			
 		if (index == 3 || index == 1) 
 			DrawTile(keyPoints,index,index+1,new TerrainOcean());
 		else if(index < 4)
-			milTiles.Add(DrawTile(keyPoints,index,index+1,new TerrainForest()));
+			milTiles.Add(DrawTile(keyPoints,index,index+1,new GameTerrain()));
 		else if (index == 4)
-			DrawTile(keyPoints,index,index+1,new TerrainForest());
+			DrawTile(keyPoints,index,index+1,new GameTerrain());
 		else // index == 5
-			DrawTile(keyPoints,index,1,new TerrainForest());
+			DrawTile(keyPoints,index,1,new GameTerrain());
 	}
 	
 	// draw tiles for bottom half
@@ -112,7 +112,7 @@ function BuildSphere() {
 			else
 				DrawTile(keyPoints,6,index,new TerrainOcean());
 		else if (index == 11)
-			milTiles.Add(DrawTile(keyPoints,6,index,new TerrainForest()));
+			milTiles.Add(DrawTile(keyPoints,6,index,new GameTerrain()));
 		else
 			DrawTile(keyPoints,6,index,new TerrainOcean());
 			
@@ -121,23 +121,23 @@ function BuildSphere() {
 		else if(index < 10)
 			DrawTile(keyPoints,index,index+1,new TerrainOcean());
 		else if (index == 10) 
-			DrawTile(keyPoints,index,index+1,new TerrainForest());
+			DrawTile(keyPoints,index,index+1,new GameTerrain());
 		else
-			DrawTile(keyPoints,index,7,new TerrainForest());
+			DrawTile(keyPoints,index,7,new GameTerrain());
 	}
 	
 	// Draw middle tiles
 	DrawTile(keyPoints,1,10,new TerrainOcean());
-	DrawTile(keyPoints,2,11,new TerrainForest());
-	milTiles.Add(DrawTile(keyPoints,3,7,new TerrainForest()));
+	DrawTile(keyPoints,2,11,new GameTerrain());
+	milTiles.Add(DrawTile(keyPoints,3,7,new GameTerrain()));
 	DrawTile(keyPoints,4,8,new TerrainOcean());
-	milTiles.Add(DrawTile(keyPoints,5,9,new TerrainForest()));
+	milTiles.Add(DrawTile(keyPoints,5,9,new GameTerrain()));
 	
 	DrawTile(keyPoints,1,9,new TerrainOcean());
-	milTiles.Add(DrawTile(keyPoints,2,10,new TerrainForest()));
-	DrawTile(keyPoints,3,11,new TerrainForest());
+	milTiles.Add(DrawTile(keyPoints,2,10,new GameTerrain()));
+	DrawTile(keyPoints,3,11,new GameTerrain());
 	DrawTile(keyPoints,4,7,new TerrainOcean());
-	aggTiles.Add(DrawTile(keyPoints,5,8,new TerrainForest()));
+	aggTiles.Add(DrawTile(keyPoints,5,8,new GameTerrain()));
 	
 	
 	// Add Villages
@@ -244,7 +244,6 @@ function GenerateTile(pointA: Vector3, pointB: Vector3, gameTerrain: GameTerrain
 	// set tileObject's photon view view id
 	var view = tileObject.GetComponent(PhotonView) as PhotonView;
 	view.viewID = tileViewID++;
-	Debug.Log("setting view");
 	
 	return tileData;
 }

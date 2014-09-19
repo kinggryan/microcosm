@@ -43,6 +43,7 @@ class Village extends SelectableComponent {
 	protected static var devotedMinimum = 3;
 	
 	private static var villageIDNumber = 500;
+	public var tilesToHarvest: ArrayList = null;
 	
 	// Methods
 	function Start() {
@@ -71,6 +72,19 @@ class Village extends SelectableComponent {
 		// initialize resources
 		ChangeResources();
 		progressRemaining = 8;
+		
+		// Connect and draw
+		ConnectToVillagesInRange();
+		DrawVillageConnectionLines();
+		
+		// initialize tiles to harvest
+		tilesToHarvest = ArrayList();
+		
+		// add this tile and adjacent tiles
+		tilesToHarvest.Add(tile);
+		for(var currentTile in tile.adjacentTiles) {
+			tilesToHarvest.Add(currentTile);
+		}
 	}
 	
 	function DevotionAbility(target: Village) { 
@@ -240,5 +254,58 @@ class Village extends SelectableComponent {
 	function InitializeMightAndInfluence(mightSet : int, influenceSet:int) {
 		might = mightSet;
 		influence = influenceSet;
+	}
+	
+	function DrawVillageConnectionLines() {
+		var lineRenderer : LineRenderer;
+		if (gameObject.GetComponent(LineRenderer) == null)
+			lineRenderer = gameObject.AddComponent(LineRenderer) as LineRenderer;
+		else
+			lineRenderer = gameObject.GetComponent(LineRenderer) as LineRenderer;
+					
+		lineRenderer.material = lineMaterial;
+		lineRenderer.SetColors(Color.yellow, Color.yellow);
+		lineRenderer.SetWidth(0.1,0.1);
+		lineRenderer.SetVertexCount(10 * connectedVillages.Count);
+		
+		var currentVillageIndex = 0;
+	
+		for(var currentObject in connectedVillages) {
+			// get adjacent village
+			var currentVillage = currentObject as Village;
+			var currentVillageObject = currentVillage.gameObject;
+			
+			var vertexPosition:Vector3 = transform.position*1.1;
+			for(var i = 0 ;  i < 5 ; i++) {
+				lineRenderer.SetPosition(currentVillageIndex*10 + i,vertexPosition);
+				if( i < 5)
+					vertexPosition = Vector3.RotateTowards(vertexPosition,currentVillageObject.transform.position*1.1,0.32,0.7);
+				else
+					vertexPosition = Vector3.RotateTowards(vertexPosition,transform.position*1.1,0.32,0.7);
+			}
+
+			currentVillageIndex++;
+		}
+	}
+	
+	function ConnectToVillagesInRange() {
+		connectedVillages = tile.GetAllVillagesInRange(2);
+		
+		// remove self
+		if (connectedVillages.Contains(this))
+			connectedVillages.Remove(this);
+	}
+	
+	function Harvest() {
+		for(var currentObj in tilesToHarvest) {
+			var currentTile = currentObj as TileData;
+			
+			currentTile.terrain.GiveResourcesToVillage(this);
+		}
+	}
+	
+	function AddTileToHarvestTiles(tileToAdd: TileData) {
+		if(!tilesToHarvest.Contains(tileToAdd))
+			tilesToHarvest.Add(tileToAdd);
 	}
 }	

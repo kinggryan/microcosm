@@ -10,10 +10,10 @@
 	
 	*****/
 	
-class Mountain extends CardData {
+class Mountain2 extends CardData {
 	// Methods
 	
-	function Mountain() {
+	function Mountain2() {
 		cardName = "Mountain";
 		text = "Terrain\nPowerCost:1\nRange:2\nResources:10M";
 		targettingMode = InteractionMode.CardTargettingTerrain;
