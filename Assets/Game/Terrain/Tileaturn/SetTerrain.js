@@ -1,4 +1,8 @@
 ﻿class Plains extends GameTerrain {
+	// The color of all advanced plains
+	static var advancedPlainsColor = Color(255/255.0,215/255.0,0/255.0);
+
+	// Methods
 	function Spent() {}
 	
 	function Initialize() {
@@ -12,14 +16,25 @@
 		if(isMine != TurnController.myTurn)
 			return;
 	
+		// if we're barren, reduce the number of turns left we have to be barren
+		if(barrenTurnsRemaining > 0) {
+			barrenTurnsRemaining--;
+			return;
+		}
+	
 		if(TurnController.myTurn)
-			village.faith += 3;
+			village.AdjustFaith(3);
 		else
-			village.faith -= 3;
+			village.AdjustFaith(-3);
 	}
 }
 
 class Mountain extends GameTerrain {
+	// Properties
+	// The color of all advanced plains
+	static var advancedMountainColor = Color(81/255.0,81/255.0,81/255.0);
+
+	// Methods
 	function Spent() {}
 	
 	function Initialize() {
@@ -33,26 +48,37 @@ class Mountain extends GameTerrain {
 		if(isMine != TurnController.myTurn)
 			return;
 	
+		// if we're barren, reduce the number of turns left we have to be barren
+		if(barrenTurnsRemaining > 0) {
+			barrenTurnsRemaining--;
+			return;
+		}
+	
 		for(var obj in village.connectedVillages) {
 			var connectedVillage = obj as Village;
 		
 			if(TurnController.myTurn)
-				connectedVillage.faith += 1;
+				connectedVillage.AdjustFaith(1);
 			else
-				connectedVillage.faith -= 1;
+				connectedVillage.AdjustFaith(-1);
 		}
 		
 		if(TurnController.myTurn)
-			village.faith += 1;
+			village.AdjustFaith(1);
 		else
-			village.faith -= 1;
+			village.AdjustFaith(-1);
 	}
 }
 
 class River extends GameTerrain {
+	// Properties
+	// The color of all advanced plains
+	static var advancedRiverColor = Color(0/255.0,199/255.0,140/255.0);
+
 	var connectedTiles: ArrayList = null;
 	var connectedRiver: ArrayList = null;
 
+	// Methods
 	function River() {
 		connectedTiles = ArrayList();
 		connectedRiver = ArrayList();

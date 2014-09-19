@@ -24,6 +24,8 @@ class GameTerrain {
 	var clay: int = 0;
 	var jewels: int = 0;
 	
+	var barrenTurnsRemaining: int = 0;
+	
 	// Methods
 	
 	function GameTerrain() {

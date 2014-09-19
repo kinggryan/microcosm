@@ -133,70 +133,31 @@ class Village extends SelectableComponent {
 		var frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y+20,40,25);
 		GUI.Label(frame,resourcesNeededString,displayStyle);
 		
-		// draw level and faith
+		// draw  faith
 		frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y-20,40,25);
-		GUI.Label(frame,"L:"+level+" F:"+faith,displayStyle);
-
-		// draw progress remaining
-		frame = Rect(screenCoords.x-20,Screen.height-screenCoords.y+0,40,25);
-		GUI.Label(frame,"PR: "+progressRemaining,displayStyle);
+		GUI.Label(frame,"F:"+faith,displayStyle);
 	}
 	
 	function AdjustFaith(faithToAdd: int) {
-		// if this has just become ours, we want to treat it as used
-		if (faith <= 0 && faithToAdd > 0)
-			TurnController.UsePiece(this);
-	
 		// adjust faith
-		faith += faithToAdd;
+		if (level == 0) {
+			faith += faithToAdd;	
+		}
 	}
 	
 	function LevelUp() {
-		// if we are level 0 or 1, we always level up. If level 2, make sure altar count is 0, ie this is still neutral
-		if(progressRemaining <= 0 && (level < 2 || (altarCount == 0))) {
-			// if faithful in either direction:
-			//	-increase / decrease altar count
-			//	- increase level
-			//	- change resources
-			//	- reset faith
-			//	- if altarCount is > 1 or < -1, tell scorekeeper
-			if (faith == 0) {
-				progressRemaining = 0;
-				return;
-			}
-				
-			if(faith > 0) {
-				altarCount++;
-				faith = 2;
-			}
-			else if (faith < 0) {
-				altarCount--;
-				faith = -2;
-			}
-			
-			level++;
-			ChangeResources();
-			progressRemaining = 8 + 4*level;
-			
-			if (altarCount == 2) {
+		if(level == 0) {
+			if(faith >= 21) {
+				// we gain control
+				renderer.material.color = Color.blue;
+				level = 1;
 				Scorekeeper.GiveScore(1);
 			}
-			else if (altarCount == -2) {
-				Scorekeeper.GiveScore(-1);
-			}
-			
-			// change color based on faith
-			if (altarCount < 0) {
+			else if (faith <= -21) {
+				// opponent gains control
 				renderer.material.color = Color.red;
-				color = Color.red;
-			}
-			else if (altarCount > 0) {
-				renderer.material.color = Color.blue;
-				color = Color.blue;
-			}
-			else {
-				renderer.material.color = Color.gray;
-				color = Color.gray;
+				level = 1;
+				Scorekeeper.GiveScore(-1);
 			}
 		}
 	}

@@ -55,8 +55,13 @@ class Terraformer extends SelectableComponent {
 				var deck = GameObject.FindObjectOfType(Deck) as Deck;
 				deck.DrawCard();
 			}
-			else if (tileToMake == "River")
+			else if (tileToMake == "River") {
+				// if there's a village on the tile, we can't make rivers there
+				if (target.village != null)
+					return false;
+			
 				target.terrain = River();
+			}
 			
 			target.terrain.tile = target;	
 			target.terrain.Initialize();
